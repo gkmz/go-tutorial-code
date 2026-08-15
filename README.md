@@ -49,8 +49,13 @@
 | `18-advanced/pprof` | pprof HTTP 入口 | ✅ 基础示例 |
 | `18-advanced/race` | 竞态检测测试 | ✅ |
 | `18-advanced/fuzz` | 原生模糊测试 | ✅ |
+| `18-advanced/singleflight` | 请求合并 | ✅ |
+| `18-advanced/reflection` | 反射基础 | ✅ |
+| `18-advanced/escape` | 逃逸分析入口 | ✅ |
+| `18-advanced/cgo` | CGO 调用边界 | ✅ macOS/Linux |
+| `18-advanced/wire` | Wire 生成说明 | ✅ 文档示例 |
 
-`18-advanced` 当前是高级教程的关键代码示例，不代表已经覆盖教程中的每一个高级主题；CGO、Wire、singleflight 等内容仍以教程文章和后续补充为准。
+`18-advanced` 当前覆盖教程中列出的关键高级主题。GMP、逃逸和 pprof 示例偏向观察入口，不替代生产故障分析。
 
 ### 第三部分：Web 开发实战
 
@@ -65,8 +70,14 @@
 | `19-web/gorm-crud` | GORM 模型、迁移和 CRUD | ✅ |
 | `19-web/upload-jwt` | 安全上传和 JWT 算法校验 | ✅ 核心示例 |
 | `19-web/graceful` | HTTP 服务优雅关闭 | ✅ |
+| `19-web/middleware` | Gin 中间件和统一错误响应 | ✅ |
+| `19-web/cors` | CORS 白名单和预检请求 | ✅ |
+| `19-web/gorm-advanced` | 事务、关联查询和软删除模型 | ✅ |
+| `19-web/observability` | slog 结构化日志和健康检查 | ✅ |
+| `19-web/deploy` | Docker 和部署检查清单 | ✅ 文档示例 |
+| `19-web/blog-api` | Gin + GORM 综合项目骨架 | ✅ 核心骨架 |
 
-当前代码库没有完整博客 API、Wire 生成项目、Prometheus 部署编排等综合工程；这些属于教程中的扩展内容，不能直接视为已完成的生产项目。
+综合项目是可运行的内存数据库骨架，不包含生产级认证、迁移、外部数据库和完整部署编排；这些边界请参阅教程对应章节。
 
 ## 🚀 快速开始
 
@@ -101,8 +112,10 @@ go run . --help
 # 运行高级或 Web 示例
 cd ../../18-advanced
 go run ./generics
+go run ./singleflight
 cd ../19-web
 go run ./gorm-crud
+go run ./blog-api
 ```
 
 ### 全量验证
