@@ -1,9 +1,9 @@
 package main
 
 import (
-"fmt"
-"sync"
-"time"
+	"fmt"
+	"sync"
+	"time"
 )
 
 // Worker Pool 模式示例

@@ -42,7 +42,7 @@ func main() {
 	fmt.Println("Breed:", d.Breed)
 
 	// 调用嵌入的方法
-	fmt.Println("Dog speaks:", d.Speak())        // Woof! Woof!（Dog 的方法）
+	fmt.Println("Dog speaks:", d.Speak())           // Woof! Woof!（Dog 的方法）
 	fmt.Println("Animal speaks:", d.Animal.Speak()) // Some sound（Animal 的方法）
 
 	// 调用 Dog 自己的方法

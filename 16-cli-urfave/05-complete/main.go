@@ -12,7 +12,7 @@ import (
 // 完整示例：包含全局 Flag、命令、子命令、生命周期方法
 
 var (
-	verbose bool
+	verbose  bool
 	weathers = []string{"sunny", "windy", "cloudy", "rainy"}
 )
 

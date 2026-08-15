@@ -1,6 +1,6 @@
 # Go 语言完整教程 - 配套代码
 
-[![Go Version](https://img.shields.io/badge/Go-1.23-blue.svg)](https://golang.org)
+[![Go Version](https://img.shields.io/badge/Go-1.25.1-blue.svg)](https://go.dev)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Tutorial](https://img.shields.io/badge/Tutorial-hankmo.com-orange.svg)](https://hankmo.com)
 
@@ -23,7 +23,7 @@
 ### 第二部分：高级教程（20 章）
 
 - **目标**：深入底层原理，掌握高级编程技巧
-- **状态**: ⏰进行中
+- **状态**: ✅示例已补齐，教程持续校验
 
 - [ ] 第 6 章：并发编程进阶
 - [ ] 第 7 章：高级语言特性
@@ -36,7 +36,9 @@
 ### 第三部分：Web 开发实战（27 章）
 
 - **目标**：从零到一构建企业级 Web 应用
-- **状态**: 📅计划中
+- **状态**: ✅核心示例已补齐，综合项目持续完善
+
+高级篇示例位于 `18-advanced/`，Web 篇示例位于 `19-web/`。每个子目录都是独立的 Go 包或模块，统一使用 Go 1.25.1。
 
 - [ ] 第 13 章：Gin 框架基础
 - [ ] 第 14 章：GORM ORM 框架
@@ -50,7 +52,7 @@
 
 ### 环境要求
 
-- Go 1.24 或更高版本
+- Go 1.25.1
 - Git
 
 ### 克隆代码
@@ -62,7 +64,7 @@ cd go-tutorial-code
 
 ### 运行示例
 
-每个章节都是独立的 Go 模块，可以单独运行：
+基础篇的单文件示例可以单独运行；带 `go.mod` 的章节是独立模块，可以单独测试：
 
 ```bash
 # 进入某个章节目录
@@ -73,6 +75,12 @@ go run main.go
 
 # 运行测试
 go test -v
+```
+
+### 全量验证
+
+```bash
+./scripts/verify.sh
 ```
 
 ## 📖 配套教程
@@ -96,11 +104,11 @@ go-tutorial-code/
 
 所有代码遵循以下规范：
 
-- ✅ 使用 Go 1.23 版本
+- ✅ 使用 Go 1.25.1 版本
 - ✅ 通过 `golangci-lint` 检查
 - ✅ 包含单元测试（覆盖率 > 60%）
 - ✅ 代码有详细注释
-- ✅ 每个示例都有 README 说明
+- ✅ 高级篇和 Web 篇模块提供 README 和独立运行说明
 
 ## 🤝 贡献
 

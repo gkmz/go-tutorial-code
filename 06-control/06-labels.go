@@ -79,7 +79,6 @@ outerLoop:
 	fmt.Println("\n=== Label scope ===")
 	// 标签必须在同一个函数内
 	// 标签后面必须跟一个语句
-label1:
 	for i := 0; i < 3; i++ {
 		if i == 1 {
 			goto label2

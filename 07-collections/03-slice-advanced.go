@@ -29,8 +29,8 @@ func main() {
 	// 删除索引 1 的元素（不保持顺序，更高效）
 	s = []int{1, 2, 3, 4, 5}
 	index = 1
-	s[index] = s[len(s)-1] // 用最后一个元素替换
-	s = s[:len(s)-1]       // 截断最后一个元素
+	s[index] = s[len(s)-1]                       // 用最后一个元素替换
+	s = s[:len(s)-1]                             // 截断最后一个元素
 	fmt.Println("After fast delete index 1:", s) // [1, 5, 3, 4]
 
 	// 3. 插入元素
@@ -49,9 +49,9 @@ func main() {
 	s = []int{1, 2, 4, 5}
 	index = 2
 	value = 3
-	s = append(s, 0)       // 扩展切片
+	s = append(s, 0)             // 扩展切片
 	copy(s[index+1:], s[index:]) // 移动元素
-	s[index] = value       // 插入新元素
+	s[index] = value             // 插入新元素
 	fmt.Println("After efficient insert:", s)
 
 	// 4. 过滤元素

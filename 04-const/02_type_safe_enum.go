@@ -13,7 +13,7 @@ const (
 	Friday
 	Saturday
 	Sunday
-	weekDays  // 7，星期总数
+	weekDays // 7，星期总数
 )
 
 // String 方法实现 Stringer 接口
@@ -110,7 +110,7 @@ func (s HTTPStatus) String() string {
 		"BadRequest", "Unauthorized", "Forbidden", "NotFound", "InternalServerError",
 	}
 	idx := s - StatusOK
-	if idx < 0 || idx >= len(names) {
+	if idx < 0 || int(idx) >= len(names) {
 		return "Unknown"
 	}
 	return names[idx]

@@ -1,6 +1,6 @@
 module github.com/hankmor/calc
 
-go 1.24
+go 1.25.1
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect

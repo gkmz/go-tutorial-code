@@ -135,9 +135,9 @@ func enumExpression() {
 	type Color int
 
 	const (
-		ColorRed Color = iota  // 0
-		ColorGreen             // 1
-		ColorBlue              // 2
+		ColorRed   Color = iota // 0
+		ColorGreen              // 1
+		ColorBlue               // 2
 	)
 
 	// 使用枚举值作为索引

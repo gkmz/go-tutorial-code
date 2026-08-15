@@ -16,8 +16,8 @@ func main() {
 	fmt.Printf("slice2: %v, len: %d, cap: %d\n", slice2, len(slice2), cap(slice2))
 
 	// 使用 make
-	slice3 := make([]int, 5)      // len=5, cap=5
-	slice4 := make([]int, 3, 5)   // len=3, cap=5
+	slice3 := make([]int, 5)    // len=5, cap=5
+	slice4 := make([]int, 3, 5) // len=3, cap=5
 	fmt.Printf("slice3: %v, len: %d, cap: %d\n", slice3, len(slice3), cap(slice3))
 	fmt.Printf("slice4: %v, len: %d, cap: %d\n", slice4, len(slice4), cap(slice4))
 
@@ -39,10 +39,10 @@ func main() {
 	s := []int{1, 2, 3, 4, 5}
 	fmt.Println("Original:", s)
 
-	s1 := s[1:3]   // [2, 3]
-	s2 := s[:3]    // [1, 2, 3]
-	s3 := s[2:]    // [3, 4, 5]
-	s4 := s[:]     // [1, 2, 3, 4, 5]
+	s1 := s[1:3] // [2, 3]
+	s2 := s[:3]  // [1, 2, 3]
+	s3 := s[2:]  // [3, 4, 5]
+	s4 := s[:]   // [1, 2, 3, 4, 5]
 
 	fmt.Println("s[1:3]:", s1)
 	fmt.Println("s[:3]:", s2)

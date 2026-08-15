@@ -1,16 +1,11 @@
-package main
+package math
 
 import (
 	"testing"
 )
 
-// 被测试的简单函数
-func Add(a, b int) int {
-	return a + b
-}
-
 // TestAddTableDriven 演示表格驱动测试
-func TestAddTableDriven(t *testing.T) {
+func TestAddTableDrivenExample(t *testing.T) {
 	// 1. 定义测试用例结构
 	tests := []struct {
 		name     string

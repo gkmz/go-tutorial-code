@@ -6,17 +6,17 @@ import "fmt"
 type Permission uint
 
 const (
-	PermRead Permission = 1 << iota // 1 (001)
-	PermWrite                       // 2 (010)
-	PermExecute                     // 4 (100)
+	PermRead    Permission = 1 << iota // 1 (001)
+	PermWrite                          // 2 (010)
+	PermExecute                        // 4 (100)
 )
 
 // 组合权限
 const (
-	PermReadWrite  = PermRead | PermWrite      // 3 (011)
-	PermReadExecute = PermRead | PermExecute    // 5 (101)
-	PermWriteExecute = PermWrite | PermExecute  // 6 (110)
-	PermAll         = PermRead | PermWrite | PermExecute  // 7 (111)
+	PermReadWrite    = PermRead | PermWrite               // 3 (011)
+	PermReadExecute  = PermRead | PermExecute             // 5 (101)
+	PermWriteExecute = PermWrite | PermExecute            // 6 (110)
+	PermAll          = PermRead | PermWrite | PermExecute // 7 (111)
 )
 
 // 检查权限
@@ -84,14 +84,14 @@ func bitFlagsExample() {
 type FileMode uint
 
 const (
-	ModeRead FileMode = 1 << iota // 1
-	ModeWrite                      // 2
-	ModeExecute                    // 4
+	ModeRead    FileMode = 1 << iota // 1
+	ModeWrite                        // 2
+	ModeExecute                      // 4
 )
 
 const (
-	ModeReadWrite    = ModeRead | ModeWrite
-	ModeAll          = ModeRead | ModeWrite | ModeExecute
+	ModeReadWrite = ModeRead | ModeWrite
+	ModeAll       = ModeRead | ModeWrite | ModeExecute
 )
 
 func (m FileMode) CanRead() bool {
@@ -142,10 +142,10 @@ func fileModeExample() {
 type LogLevel uint
 
 const (
-	LogDebug LogLevel = 1 << iota // 1
-	LogInfo                        // 2
-	LogWarning                     // 4
-	LogError                       // 8
+	LogDebug   LogLevel = 1 << iota // 1
+	LogInfo                         // 2
+	LogWarning                      // 4
+	LogError                        // 8
 )
 
 const LogAll = LogDebug | LogInfo | LogWarning | LogError

@@ -2,6 +2,15 @@ package main
 
 import "fmt"
 
+// MyInt 演示定义类型后的常量类型检查。
+type MyInt int
+
+const (
+	Small MyInt = iota
+	Medium
+	Large
+)
+
 // 无类型常量 vs 有类型常量
 func untypedVsTyped() {
 	fmt.Println("=== 无类型常量 vs 有类型常量 ===")
@@ -13,9 +22,9 @@ func untypedVsTyped() {
 	fmt.Printf("piFloat32 * float32(rInt) = %f\n", piFloat32*float32(rInt))
 
 	// 无类型常量（推荐）
-	const pi = 3.1415926  // 不指定类型
+	const pi = 3.1415926 // 不指定类型
 	const r = 4
-	const area = pi * r * r  // ✅ 直接运算，Go 自动处理类型
+	const area = pi * r * r // ✅ 直接运算，Go 自动处理类型
 	fmt.Printf("area = %f (type: %T)\n", area, area)
 
 	// 验证类型推导
@@ -26,7 +35,7 @@ func untypedVsTyped() {
 func untypedFlexibility() {
 	fmt.Println("\n=== 无类型常量的灵活性 ===")
 
-	const x = 10  // 无类型常量
+	const x = 10 // 无类型常量
 
 	// 可以赋值给任何整数类型
 	var i1 int = x
@@ -53,15 +62,6 @@ func untypedFlexibility() {
 // 有类型常量的必要性
 func typedConstNecessity() {
 	fmt.Println("\n=== 有类型常量的必要性 ===")
-
-	// 当需要类型安全时
-	type MyInt int
-
-	const (
-		Small MyInt = iota  // 指定类型
-		Medium
-		Large
-	)
 
 	// 函数参数类型安全
 	checkSize(Small)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"io"
@@ -13,13 +14,13 @@ func compareBytes() {
 	c := []byte("hello")
 
 	// Compare 返回 -1 (a < b), 0 (a == b), 1 (a > b)
-	fmt.Println("Compare(a, b):", bytes.Compare(a, b))   // -1
-	fmt.Println("Compare(a, c):", bytes.Compare(a, c))   // 0
-	fmt.Println("Compare(b, a):", bytes.Compare(b, a))   // 1
+	fmt.Println("Compare(a, b):", bytes.Compare(a, b)) // -1
+	fmt.Println("Compare(a, c):", bytes.Compare(a, c)) // 0
+	fmt.Println("Compare(b, a):", bytes.Compare(b, a)) // 1
 
 	// Equal 检查是否相等
-	fmt.Println("Equal(a, c):", bytes.Equal(a, c))       // true
-	fmt.Println("Equal(a, b):", bytes.Equal(a, b))       // false
+	fmt.Println("Equal(a, c):", bytes.Equal(a, c)) // true
+	fmt.Println("Equal(a, b):", bytes.Equal(a, b)) // false
 }
 
 // containsBytes 检查字节切片是否包含子切片
@@ -156,12 +157,13 @@ func readBytes() {
 	b, _ := reader.ReadByte()
 	fmt.Printf("ReadByte: %q\n", string(b))
 
-	// ReadBytes 读取直到分隔符
-	rest, _ := reader.ReadBytes(' ')
+	// bufio.Reader 提供按分隔符读取的 ReadBytes 方法。
+	buffered := bufio.NewReader(reader)
+	rest, _ := buffered.ReadBytes(' ')
 	fmt.Printf("ReadBytes ' ': %q\n", string(rest))
 
 	// ReadString 读取直到分隔符（返回字符串）
-	reader2 := bytes.NewReader(data)
+	reader2 := bufio.NewReader(bytes.NewReader(data))
 	s, _ := reader2.ReadString(' ')
 	fmt.Printf("ReadString ' ': %q\n", s)
 }

@@ -12,7 +12,7 @@ func constExamples() {
 
 	// 批量常量
 	const (
-		StatusOK      = 200
+		StatusOK       = 200
 		StatusNotFound = 404
 		StatusError    = 500
 	)
@@ -37,15 +37,15 @@ func iotaExamples() {
 
 	// iota 从 0 开始
 	const (
-		a = iota  // 0
-		b = iota  // 1
-		c = iota  // 2
+		a = iota // 0
+		b = iota // 1
+		c = iota // 2
 	)
 	fmt.Printf("a=%d, b=%d, c=%d\n", a, b, c)
 
 	// 简写（同一行省略）
 	const (
-		d = iota  // 0
+		d = iota // 0
 		e        // 1（继承 iota）
 		f        // 2
 	)
@@ -55,25 +55,25 @@ func iotaExamples() {
 	const (
 		_  = iota             // 0（跳过）
 		KB = 1 << (10 * iota) // 1 << 10 = 1024
-		MB                   // 1 << 20
-		GB                   // 1 << 30
-		TB                   // 1 << 40
+		MB                    // 1 << 20
+		GB                    // 1 << 30
+		TB                    // 1 << 40
 	)
 	fmt.Printf("KB=%d, MB=%d, GB=%d, TB=%d\n", KB, MB, GB, TB)
 
 	// 位掩码
 	const (
-		FlagRead    = 1 << iota  // 1
-		FlagWrite                // 2
-		FlagExecute              // 4
+		FlagRead    = 1 << iota // 1
+		FlagWrite               // 2
+		FlagExecute             // 4
 	)
 	fmt.Printf("FlagRead=%d, FlagWrite=%d, FlagExecute=%d\n", FlagRead, FlagWrite, FlagExecute)
 
 	// 混合使用
 	const (
-		CategoryBook  = iota  // 0
-		CategoryElectronics    // 1
-		CategoryClothing       // 2
+		CategoryBook        = iota // 0
+		CategoryElectronics        // 1
+		CategoryClothing           // 2
 	)
 	fmt.Printf("Categories: book=%d, electronics=%d, clothing=%d\n",
 		CategoryBook, CategoryElectronics, CategoryClothing)

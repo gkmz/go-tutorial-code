@@ -1,3 +1,5 @@
+//go:build urfave
+
 package main
 
 import (
@@ -25,9 +27,9 @@ func main() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:    "add",
-				Aliases: []string{"a"},
-				Usage:   "执行加法运算",
+				Name:      "add",
+				Aliases:   []string{"a"},
+				Usage:     "执行加法运算",
 				ArgsUsage: "<num1> <num2>",
 				Action: func(c *cli.Context) error {
 					if c.NArg() < 2 {
@@ -46,9 +48,9 @@ func main() {
 				},
 			},
 			{
-				Name:    "sub",
-				Aliases: []string{"s"},
-				Usage:   "执行减法运算",
+				Name:      "sub",
+				Aliases:   []string{"s"},
+				Usage:     "执行减法运算",
 				ArgsUsage: "<num1> <num2>",
 				Action: func(c *cli.Context) error {
 					if c.NArg() < 2 {
@@ -61,9 +63,9 @@ func main() {
 				},
 			},
 			{
-				Name:    "mul",
-				Aliases: []string{"m"},
-				Usage:   "执行乘法运算",
+				Name:      "mul",
+				Aliases:   []string{"m"},
+				Usage:     "执行乘法运算",
 				ArgsUsage: "<num1> <num2>",
 				Action: func(c *cli.Context) error {
 					if c.NArg() < 2 {
@@ -76,9 +78,9 @@ func main() {
 				},
 			},
 			{
-				Name:    "div",
-				Aliases: []string{"d"},
-				Usage:   "执行除法运算",
+				Name:      "div",
+				Aliases:   []string{"d"},
+				Usage:     "执行除法运算",
 				ArgsUsage: "<num1> <num2>",
 				Action: func(c *cli.Context) error {
 					if c.NArg() < 2 {

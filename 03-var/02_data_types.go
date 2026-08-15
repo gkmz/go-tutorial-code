@@ -30,7 +30,7 @@ func integerTypes() {
 	fmt.Printf("int (platform): %d, uint (platform): %d\n", i, u)
 
 	// 特殊类型
-	var b byte = 255  // uint8 别名
+	var b byte = 255 // uint8 别名
 	var r rune = '中' // int32 别名，存 Unicode
 	fmt.Printf("byte: %d, rune: %d (char: %c)\n", b, r, r)
 }
@@ -97,7 +97,7 @@ func stringType() {
 
 	// 遍历字符串（按字符/rune）
 	fmt.Print("chars: ")
-	for i, ch := range s1 {
+	for _, ch := range s1 {
 		fmt.Printf("%c", ch)
 	}
 	fmt.Println()
@@ -128,7 +128,7 @@ func byteAndRune() {
 
 	// 正确遍历
 	fmt.Print("runes: ")
-	for i, ch := range s {
+	for _, ch := range s {
 		fmt.Printf("%c", ch)
 	}
 	fmt.Println()

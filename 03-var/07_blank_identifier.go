@@ -18,7 +18,10 @@ func blankIdentifier() {
 	getUser() // 不使用返回值
 
 	// 在循环中使用
-	scores := []struct{ name string; score int }{
+	scores := []struct {
+		name  string
+		score int
+	}{
 		{"Alice", 90},
 		{"Bob", 85},
 		{"Charlie", 92},

@@ -116,9 +116,9 @@ func multiLevelPointer() {
 	fmt.Println("\n=== 多级指针 ===")
 
 	x := 10
-	p := &x      // *int
-	pp := &p     // **int
-	ppp := &pp   // ***int
+	p := &x    // *int
+	pp := &p   // **int
+	ppp := &pp // ***int
 
 	fmt.Printf("x = %d\n", x)
 	fmt.Printf("*p = %d\n", *p)

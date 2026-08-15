@@ -63,7 +63,7 @@ func main() {
 	// 7. 省略初始化和后置语句
 	fmt.Println("\n=== Omit init and post ===")
 	sum := 0
-	for ; sum < 10; {
+	for sum < 10 {
 		sum += 2
 		fmt.Print(sum, " ")
 	}

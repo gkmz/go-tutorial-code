@@ -8,7 +8,7 @@ import (
 
 func main() {
 	fmt.Println("--- 场景 1: 原生 Map 的并发写冲突 (引发 panic) ---")
-	
+
 	// 模拟并发更新 Map
 	// m := make(map[string]int)
 	// 注意：运行此代码时，可能会直接引发：fatal error: concurrent map writes
@@ -53,6 +53,6 @@ func main() {
 
 	wg.Wait()
 	fmt.Println("成功使用 RWMutex 完成并发读写，未发生 panic")
-	
+
 	time.Sleep(100 * time.Millisecond)
 }

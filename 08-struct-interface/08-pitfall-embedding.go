@@ -30,7 +30,7 @@ func main() {
 	fmt.Println("\n--- 值嵌入（错误）---")
 	d1 := DogWrong{Animal: Animal{Name: "Buddy"}}
 	fmt.Println("Before SetName:", d1.Name)
-	d1.SetName("Max") // 编译通过，但...
+	d1.SetName("Max")                      // 编译通过，但...
 	fmt.Println("After SetName:", d1.Name) // 还是 "Buddy"！
 
 	// 原因：DogWrong 值嵌入了 Animal，但 SetName 是指针接收者
