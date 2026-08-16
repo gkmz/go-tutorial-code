@@ -14,11 +14,16 @@ for mod in $(find . -name go.mod -not -path './.git/*' -print); do
 	(cd "$mod_dir" && go test ./...)
 done
 
-for file in $(find . -name '*.go' -not -name '*_test.go' -not -path './.git/*' \
-	-not -path './12-testing/*' -not -path './13-modules/*' -not -path './15-project-example/*' -not -path './16-cli-urfave/*' \
-	-not -path './18-advanced/*' -not -path './19-web/*' -print); do
+while IFS= read -r -d '' file; do
+	# 只有 main 包才能作为单文件程序运行，库包交给上面的 go test 验证。
+	if ! grep -qE '^package[[:space:]]+main([[:space:]]|$)' "$file"; then
+		continue
+	fi
 	printf 'running example: %s\n' "$file"
 	go run "$file" >/dev/null
-done
+done < <(find . -name '*.go' -not -name '*_test.go' -not -path './.git/*' \
+	-not -path '*/exercises/*' \
+	-not -path './12-testing/*' -not -path './13-modules/*' -not -path './15-project-example/*' -not -path './16-cli-urfave/*' \
+	-not -path './18-advanced/*' -not -path './19-web/*' -print0)
 
 printf 'verification passed\n'
