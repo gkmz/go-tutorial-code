@@ -44,7 +44,7 @@
 | `18-advanced/concurrency` | worker pool 和取消 | ✅ 核心示例 |
 | `18-advanced/context` | Context 超时和取消 | ✅ 核心示例 |
 | `18-advanced/generics` | 泛型约束和泛型函数 | ✅ 核心示例 |
-| `18-advanced/gmp` | 调度器运行时信息 | ✅ 基础示例 |
+| `18-advanced/gmp` | 调度器运行时信息和百万 Goroutine 调度演示 | ✅ 基础示例 |
 | `18-advanced/memory` | 内存统计 | ✅ 基础示例 |
 | `18-advanced/pprof` | pprof HTTP 入口 | ✅ 基础示例 |
 | `18-advanced/race` | 竞态检测测试 | ✅ |
