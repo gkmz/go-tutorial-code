@@ -13,7 +13,7 @@ Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用�
 | 目录 | 对应主题 |
 | --- | --- |
 | `gmp` | GMP 调度、抢占、计时器、Trace 与 GOMAXPROCS 实验 |
-| `singleflight` | 请求合并 |
+| `singleflight` | 请求合并、TTL 缓存、独立等待者超时与 Forget |
 | `race` | Race Detector 测试 |
 | `generics` | 泛型约束和泛型函数 |
 | `reflection` | Type、Value、字段读取与修改、标签校验和 benchmark |
@@ -34,6 +34,14 @@ go test ./gmp
 go test -race ./gmp
 go test -run '^TestTraceWorkload$' -trace /tmp/gmp-trace.out ./gmp
 go test -run '^$' -bench BenchmarkCPUWorkGOMAXPROCS -benchmem ./gmp
+```
+
+singleflight 示例位于 `singleflight`，覆盖稳定的并发重叠测试、缓存组合、key 隔离、等待者超时、错误共享和 `Forget`：
+
+```bash
+go run ./singleflight
+go test ./singleflight
+go test -race ./singleflight
 ```
 
 逃逸分析示例位于 `escape`，可以分别查看编译器诊断和实际分配次数：

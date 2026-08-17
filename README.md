@@ -49,7 +49,7 @@
 | `18-advanced/pprof` | pprof HTTP 入口 | 已完成 基础示例 |
 | `18-advanced/race` | 竞态检测测试 | 已完成 |
 | `18-advanced/fuzz` | 原生模糊测试 | 已完成 |
-| `18-advanced/singleflight` | 请求合并 | 已完成 |
+| `18-advanced/singleflight` | 请求合并、缓存、超时、错误共享与 Forget | 已完成 用法示例与测试 |
 | `18-advanced/reflection` | Type、Value、字段修改、标签校验和性能对比 | 已完成 |
 | `18-advanced/escape` | 逃逸分析入口 | 已完成 |
 | `18-advanced/cgo` | CGO 调用边界 | 已完成 macOS/Linux |
