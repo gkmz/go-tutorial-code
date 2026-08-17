@@ -19,5 +19,10 @@ go vet ./...
 | `05-workerpool` | 可取消 Worker Pool | 可取消 Worker Pool 完整实现与测试 |
 | `06-httpclient` | HTTP Client、幂等重试与响应体管理 | HTTP Client 封装与重试编码题 |
 | `07-ratelimiter` | 可取消令牌桶限流器 | 限流器实现与测试 |
+| `08-core-semantics` | Slice、typed nil、defer、错误包装、泛型和反射实验 | Go 语言核心面试 |
+| `09-web-examples` | HTTP 超时、请求 ID 和慢消费者广播 | 工程化与 Web 开发 |
+| `10-runtime-experiments` | 逃逸、内存快照、CPU Profile、Trace 和 Benchmark | Runtime 与性能优化 |
+| `11-storage-examples` | Cache Aside、内存缓存和 Fencing Token | 数据库与存储 |
+| `12-rpc-messaging` | RPC Deadline、Kafka 分区、重试和死信 | gRPC 与 Kafka |
 
 这些实现用于学习和面试训练，不是面向所有生产场景的通用库。阅读代码时应同时关注需求约束、失败路径、资源生命周期和测试边界。
