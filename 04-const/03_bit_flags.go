@@ -62,14 +62,14 @@ func (p Permission) String() string {
 func bitFlagsExample() {
 	fmt.Println("=== 位标志枚举 ===")
 
-	// 用户权限
+	// 用户权限，读写权限
 	userPerm := PermRead | PermWrite
 	fmt.Printf("User permissions: %d (%s)\n", userPerm, userPerm)
 
 	// 检查权限
-	fmt.Printf("Can read? %v\n", hasPermission(userPerm, PermRead))
-	fmt.Printf("Can write? %v\n", hasPermission(userPerm, PermWrite))
-	fmt.Printf("Can execute? %v\n", hasPermission(userPerm, PermExecute))
+	fmt.Printf("Can read? %v\n", hasPermission(userPerm, PermRead))       // true
+	fmt.Printf("Can write? %v\n", hasPermission(userPerm, PermWrite))     // true
+	fmt.Printf("Can execute? %v\n", hasPermission(userPerm, PermExecute)) // false
 
 	// 添加权限
 	userPerm = addPermission(userPerm, PermExecute)
@@ -129,13 +129,14 @@ func (m FileMode) String() string {
 func fileModeExample() {
 	fmt.Println("\n=== 文件权限 ===")
 
+	// 读写权限
 	mode := ModeReadWrite
 	fmt.Printf("Mode: %d (%s)\n", mode, mode)
 
 	// 检查权限
-	fmt.Printf("Can read? %v\n", mode.CanRead())
-	fmt.Printf("Can write? %v\n", mode.CanWrite())
-	fmt.Printf("Can execute? %v\n", mode.CanExecute())
+	fmt.Printf("Can read? %v\n", mode.CanRead())       // true
+	fmt.Printf("Can write? %v\n", mode.CanWrite())     // true
+	fmt.Printf("Can execute? %v\n", mode.CanExecute()) // false
 }
 
 // LogLevel 日志级别
