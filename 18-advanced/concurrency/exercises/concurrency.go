@@ -12,8 +12,10 @@ import (
 
 // SafeCache 是一个由读写锁保护的字符串缓存。
 type SafeCache struct {
-	mu   sync.RWMutex
-	data map[string]string
+	mu     sync.RWMutex
+	data   map[string]string
+	reads  atomic.Uint64
+	writes atomic.Uint64
 }
 
 // NewSafeCache 创建一个空的并发安全缓存。
@@ -25,6 +27,7 @@ func NewSafeCache() *SafeCache {
 func (c *SafeCache) Get(key string) (string, bool) {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
+	c.reads.Add(1)
 	value, ok := c.data[key]
 	return value, ok
 }
@@ -34,6 +37,12 @@ func (c *SafeCache) Set(key, value string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.data[key] = value
+	c.writes.Add(1)
+}
+
+// Stats 返回缓存从创建以来的读取和写入次数。
+func (c *SafeCache) Stats() (reads, writes uint64) {
+	return c.reads.Load(), c.writes.Load()
 }
 
 // OnceLoader 用 sync.Once 保证初始化函数最多执行一次。
@@ -55,6 +64,26 @@ func (l *OnceLoader[T]) Load(initFn func() (T, error)) (T, error) {
 // SessionStore 使用 sync.Map 保存并发访问的会话数据。
 type SessionStore struct {
 	data sync.Map
+}
+
+// MutexCounter 是一个由互斥锁保护的整数计数器。
+type MutexCounter struct {
+	mu    sync.Mutex
+	value int64
+}
+
+// Add 将计数器增加 delta。
+func (c *MutexCounter) Add(delta int64) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.value += delta
+}
+
+// Value 返回计数器当前值。
+func (c *MutexCounter) Value() int64 {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.value
 }
 
 // AtomicCounter 是使用原子整数实现的并发安全计数器。
@@ -111,7 +140,12 @@ func (s *SessionStore) Delete(id string) {
 	s.data.Delete(id)
 }
 
-// RunLimited 使用信号量限制任务的最大并发数。
+// Clear 删除全部会话。
+func (s *SessionStore) Clear() {
+	s.data.Clear()
+}
+
+// RunLimited 使用 errgroup.SetLimit 限制任务的最大并发数。
 func RunLimited(ctx context.Context, limit int64, jobs []func(context.Context) error) error {
 	if limit <= 0 {
 		return &InvalidLimitError{Limit: limit}
@@ -119,18 +153,60 @@ func RunLimited(ctx context.Context, limit int64, jobs []func(context.Context) e
 
 	group, groupCtx := errgroup.WithContext(ctx)
 	group.SetLimit(int(limit))
-	sem := semaphore.NewWeighted(limit)
 	for _, job := range jobs {
 		job := job
 		group.Go(func() error {
-			if err := sem.Acquire(groupCtx, 1); err != nil {
-				return err
+			return job(groupCtx)
+		})
+	}
+	return group.Wait()
+}
+
+// RunWithSemaphore 使用带权信号量限制同时占用资源的任务数量。
+func RunWithSemaphore(ctx context.Context, limit int64, jobs []func(context.Context) error) error {
+	if limit <= 0 {
+		return &InvalidLimitError{Limit: limit}
+	}
+
+	group, groupCtx := errgroup.WithContext(ctx)
+	sem := semaphore.NewWeighted(limit)
+	for _, job := range jobs {
+		// 在启动 Goroutine 前获取许可，避免创建大量等待中的 Goroutine。
+		if err := sem.Acquire(groupCtx, 1); err != nil {
+			if groupErr := group.Wait(); groupErr != nil {
+				return groupErr
 			}
+			return err
+		}
+
+		job := job
+		group.Go(func() error {
 			defer sem.Release(1)
 			return job(groupCtx)
 		})
 	}
 	return group.Wait()
+}
+
+// DownloadAll 并发执行下载函数，并在任一下载失败后取消其他任务。
+func DownloadAll(
+	ctx context.Context,
+	limit int64,
+	urls []string,
+	fetch func(context.Context, string) error,
+) error {
+	if fetch == nil {
+		return &InvalidFetcherError{}
+	}
+
+	jobs := make([]func(context.Context) error, 0, len(urls))
+	for _, url := range urls {
+		url := url
+		jobs = append(jobs, func(jobCtx context.Context) error {
+			return fetch(jobCtx, url)
+		})
+	}
+	return RunLimited(ctx, limit, jobs)
 }
 
 // InvalidLimitError 表示并发上限不是正数。
@@ -141,4 +217,12 @@ type InvalidLimitError struct {
 // Error 返回错误描述。
 func (e *InvalidLimitError) Error() string {
 	return "concurrency limit must be greater than zero"
+}
+
+// InvalidFetcherError 表示下载函数为空。
+type InvalidFetcherError struct{}
+
+// Error 返回错误描述。
+func (e *InvalidFetcherError) Error() string {
+	return "fetch function must not be nil"
 }
