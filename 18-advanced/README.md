@@ -18,13 +18,21 @@ Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用�
 | `generics` | 泛型约束和泛型函数 |
 | `reflection` | Type、Value 和字段读取 |
 | `memory` | GC 内存统计 |
-| `escape` | 逃逸分析入口 |
+| `escape` | 返回值、返回指针、slice、闭包、编译器诊断和分配 benchmark |
 | `pprof` | HTTP pprof 入口 |
 | `cgo` | CGO 调用边界 |
 | `fuzz` | 原生模糊测试 |
 | `wire` | Wire 生成流程说明 |
 
 这些目录用于支撑教程中的关键示例。依赖注入生成、CGO、pprof 和外部服务相关示例需要根据文章说明准备工具或运行环境。
+
+逃逸分析示例位于 `escape`，可以分别查看编译器诊断和实际分配次数：
+
+```bash
+cd escape
+go build -o /tmp/go-escape-example -gcflags='-m=2' .
+go test -run '^$' -bench . -benchmem
+```
 
 gRPC 与 Context 的调用链、metadata、拦截器和状态码说明位于 `context/grpc/README.md`。该目录使用 protobuf 生成代码作为类型前提，重点验证 Context 的传播规则。
 
