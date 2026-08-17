@@ -56,6 +56,32 @@ func TestSessionStore(t *testing.T) {
 	}
 }
 
+func TestAtomicCounter(t *testing.T) {
+	var counter AtomicCounter
+	var wg sync.WaitGroup
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			counter.Add(1)
+		}()
+	}
+	wg.Wait()
+	if got := counter.Value(); got != 100 {
+		t.Fatalf("counter = %d, want 100", got)
+	}
+}
+
+func TestAtomicConfigCopiesSnapshots(t *testing.T) {
+	var config AtomicConfig
+	config.Store(map[string]string{"mode": "safe"})
+	loaded := config.Load()
+	loaded["mode"] = "changed"
+	if got := config.Load()["mode"]; got != "safe" {
+		t.Fatalf("config mode = %q, want safe", got)
+	}
+}
+
 func TestRunLimitedStopsOnError(t *testing.T) {
 	wantErr := errors.New("job failed")
 	jobs := []func(context.Context) error{

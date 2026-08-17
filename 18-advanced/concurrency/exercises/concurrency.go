@@ -4,6 +4,7 @@ package exercises
 import (
 	"context"
 	"sync"
+	"sync/atomic"
 
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/sync/semaphore"
@@ -54,6 +55,45 @@ func (l *OnceLoader[T]) Load(initFn func() (T, error)) (T, error) {
 // SessionStore 使用 sync.Map 保存并发访问的会话数据。
 type SessionStore struct {
 	data sync.Map
+}
+
+// AtomicCounter 是使用原子整数实现的并发安全计数器。
+type AtomicCounter struct {
+	value atomic.Int64
+}
+
+// Add 将计数器增加 delta。
+func (c *AtomicCounter) Add(delta int64) {
+	c.value.Add(delta)
+}
+
+// Value 返回计数器当前值。
+func (c *AtomicCounter) Value() int64 {
+	return c.value.Load()
+}
+
+// AtomicConfig 保存可以整体替换的配置快照。
+type AtomicConfig struct {
+	value atomic.Value
+}
+
+// Store 发布新的配置快照。所有快照必须使用相同的动态类型。
+func (c *AtomicConfig) Store(config map[string]string) {
+	copyOfConfig := make(map[string]string, len(config))
+	for key, value := range config {
+		copyOfConfig[key] = value
+	}
+	c.value.Store(copyOfConfig)
+}
+
+// Load 返回配置快照的副本，调用方可以安全修改返回值。
+func (c *AtomicConfig) Load() map[string]string {
+	value := c.value.Load().(map[string]string)
+	copyOfConfig := make(map[string]string, len(value))
+	for key, item := range value {
+		copyOfConfig[key] = item
+	}
+	return copyOfConfig
 }
 
 // Put 保存会话值。
