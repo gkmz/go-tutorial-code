@@ -13,7 +13,7 @@ Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用�
 | 目录 | 对应主题 |
 | --- | --- |
 | `gmp` | GMP 调度、抢占、计时器、Trace 与 GOMAXPROCS 实验 |
-| `singleflight` | 请求合并、TTL 缓存、独立等待者超时与 Forget |
+| `singleflight` | 请求合并、TTL 缓存、独立等待者超时、Forget 与教学实现 |
 | `race` | Race Detector 测试 |
 | `generics` | 泛型约束和泛型函数 |
 | `reflection` | Type、Value、字段读取与修改、标签校验和 benchmark |

@@ -23,3 +23,14 @@ go test -race ./singleflight
 ```
 
 示例中的 `context.WithoutCancel` 会保留首个调用 Context 的 Value。真实服务需要明确追踪、鉴权和租户信息如何进入共享加载，不能把请求 Context 的所有权问题交给 singleflight 自动决定。
+
+## 原理篇
+
+`simpleflight` 子包使用 Mutex、Map、WaitGroup 和容量为 1 的结果 Channel 实现教学版请求合并，并通过测试覆盖重复调用、错误发布、`Forget`、panic 和 `runtime.Goexit`：
+
+```bash
+go test ./singleflight/simpleflight
+go test -race ./singleflight/simpleflight
+```
+
+教学实现会把 panic 和 `runtime.Goexit` 转换成错误发布给等待者。官方 `x/sync/singleflight v0.22.0` 会保留更强的异常语义，尤其是 `DoChan` 遇到 panic 时可能让进程崩溃。不要在生产项目中用 `simpleflight` 替换官方依赖。
