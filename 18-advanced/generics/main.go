@@ -2,8 +2,8 @@ package main
 
 import "fmt"
 
-// Number 定义支持加法的数值类型集合。
-type Number interface{ int | int64 | float64 }
+// Number 定义支持加法的预声明数值类型及其自定义底层类型。
+type Number interface{ ~int | ~int64 | ~float64 }
 
 // Sum 返回切片中所有元素的和。
 func Sum[T Number](values []T) T {
