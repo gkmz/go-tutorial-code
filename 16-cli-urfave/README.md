@@ -5,7 +5,7 @@
 ## 目录结构
 
 ```
-16-cli-tool/
+16-cli-urfave/
 ├── 01-hello/           # 最简单的 Hello World
 ├── 02-flags/           # 添加全局 Flag
 ├── 03-commands/        # 添加命令
@@ -64,7 +64,7 @@ Before → Action → After
 
 - `Before`：命令执行前调用，可用于验证
 - `Action`：命令的主要逻辑
-- `After`：命令执行后调用，即使 Action panic 也会执行
+- `After`：命令执行后的收尾钩子；关键资源仍应在创建位置使用 `defer` 管理
 
 ## 参考资源
 

@@ -12,5 +12,5 @@ A simple command-line calculator written in Go.
 ## Installation
 
 ```bash
-go install github.com/username/go-calc@latest
+go install github.com/hankmor/calc/cmd/calc@latest
 ```
