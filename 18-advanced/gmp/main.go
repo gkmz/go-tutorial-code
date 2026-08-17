@@ -1,29 +1,68 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"os"
 	"runtime"
-	"sync"
 	"time"
 )
 
 func main() {
-	// GOMAXPROCS 返回当前运行时允许并行执行 Go 代码的 P 数量。
-	fmt.Println("GOMAXPROCS:", runtime.GOMAXPROCS(0))
+	mode := flag.String("mode", "burst", "实验模式：burst、preempt 或 timer")
+	count := flag.Int("count", 10_000, "burst 模式创建的 Goroutine 数量")
+	duration := flag.Duration("duration", 500*time.Millisecond, "preempt 或 timer 模式的实验时长")
+	flag.Parse()
 
-	// 用 WaitGroup 等待一百万个短任务完成，观察 Goroutine 的创建和调度成本。
-	const count = 1_000_000
-	var wg sync.WaitGroup
-	start := time.Now()
-	for i := 0; i < count; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			// 任务只做极少量工作，避免把示例变成计算性能测试。
-			_ = 1 + 1
-		}()
+	fmt.Printf("Go=%s GOMAXPROCS=%d NumCPU=%d\n", runtime.Version(), runtime.GOMAXPROCS(0), runtime.NumCPU())
+
+	var err error
+	switch *mode {
+	case "burst":
+		err = printBurstResult(*count)
+	case "preempt":
+		err = printPreemptionResult(*duration)
+	case "timer":
+		err = printTimerResult(*duration)
+	default:
+		err = fmt.Errorf("unknown mode %q", *mode)
 	}
-	wg.Wait()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "experiment failed:", err)
+		os.Exit(1)
+	}
+}
 
-	fmt.Printf("Finished %d goroutines in %v\n", count, time.Since(start))
+func printBurstResult(count int) error {
+	result, err := runGoroutineBurst(count)
+	if err != nil {
+		return err
+	}
+	fmt.Printf(
+		"created=%d peak_goroutines=%d heap_before=%d heap_at_peak=%d elapsed=%s\n",
+		result.Count,
+		result.PeakGoroutines,
+		result.HeapBefore,
+		result.HeapAtPeak,
+		result.Elapsed,
+	)
+	return nil
+}
+
+func printPreemptionResult(duration time.Duration) error {
+	result, err := runPreemptionExperiment(duration)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("duration=%s observer_ticks=%d checksum=%d\n", result.Elapsed, result.ObserverTicks, result.Checksum)
+	return nil
+}
+
+func printTimerResult(duration time.Duration) error {
+	result, err := runTimerExperiment(duration)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("waited=%s checksum=%d\n", result.Elapsed, result.Checksum)
+	return nil
 }
