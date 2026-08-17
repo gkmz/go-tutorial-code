@@ -4,6 +4,8 @@
 
 并发进阶练习参考实现位于 `concurrency/exercises`，覆盖读写锁、`sync.Once`、`sync.Map`、并发限制和 `errgroup` 错误传播。运行练习测试：
 
+Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用、取消传播和固定 worker 数量。
+
 ```bash
 go test ./...
 go test -race ./...
