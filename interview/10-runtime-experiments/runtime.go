@@ -62,7 +62,7 @@ func CaptureTrace(path string, workload func()) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 	if err := trace.Start(file); err != nil {
 		return err
 	}

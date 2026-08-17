@@ -11,7 +11,7 @@ import (
 
 func TestClientRetriesGet(t *testing.T) {
 	var requests atomic.Int32
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		if requests.Add(1) < 3 {
 			w.WriteHeader(http.StatusBadGateway)
 			return
@@ -28,7 +28,7 @@ func TestClientRetriesGet(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if requests.Load() != 3 {
 		t.Fatalf("requests = %d, want 3", requests.Load())
 	}
@@ -36,7 +36,7 @@ func TestClientRetriesGet(t *testing.T) {
 
 func TestClientDoesNotRetryPostByDefault(t *testing.T) {
 	var requests atomic.Int32
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		requests.Add(1)
 		w.WriteHeader(http.StatusBadGateway)
 	}))
@@ -50,14 +50,14 @@ func TestClientDoesNotRetryPostByDefault(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if requests.Load() != 1 {
 		t.Fatalf("requests = %d, want 1", requests.Load())
 	}
 }
 
 func TestClientHonorsContext(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(_ http.ResponseWriter, r *http.Request) {
 		<-r.Context().Done()
 	}))
 	defer server.Close()
@@ -67,7 +67,10 @@ func TestClientHonorsContext(t *testing.T) {
 		t.Fatal(err)
 	}
 	cancel()
-	_, err = New(server.Client(), 1).Do(ctx, req)
+	resp, err := New(server.Client(), 1).Do(ctx, req)
+	if resp != nil {
+		_ = resp.Body.Close()
+	}
 	if err == nil || fmt.Sprint(err) == "" {
 		t.Fatal("expected context cancellation error")
 	}

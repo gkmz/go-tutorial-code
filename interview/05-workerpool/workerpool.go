@@ -54,10 +54,11 @@ func (p *Pool) Run(ctx context.Context, jobs []Job) error {
 		})
 	}
 
+submitJobs:
 	for _, job := range jobs {
 		select {
 		case <-runCtx.Done():
-			break
+			break submitJobs
 		case queue <- job:
 		}
 		if runCtx.Err() != nil {

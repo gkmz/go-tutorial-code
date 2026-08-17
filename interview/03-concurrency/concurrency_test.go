@@ -61,7 +61,9 @@ func TestGroupSharesResult(t *testing.T) {
 			}
 		}()
 	}
-	if <-results != 42 || <-results != 42 {
+	first := <-results
+	second := <-results
+	if first != 42 || second != 42 {
 		t.Fatal("unexpected shared result")
 	}
 	if calls.Load() != 1 {

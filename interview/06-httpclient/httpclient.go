@@ -32,31 +32,18 @@ func (c *Client) Do(ctx context.Context, req *http.Request) (*http.Response, err
 	if req == nil {
 		return nil, fmt.Errorf("nil request")
 	}
-	retryableMethod := req.Method == http.MethodGet || req.Method == http.MethodHead || req.Method == http.MethodOptions
+	retryableMethod := isRetryableMethod(req.Method)
 	var lastErr error
 	for attempt := 0; attempt <= c.maxRetry; attempt++ {
-		current := req.Clone(ctx)
-		if attempt > 0 && req.Body != nil {
-			if req.GetBody == nil {
-				return nil, fmt.Errorf("request body is not replayable")
-			}
-			body, err := req.GetBody()
-			if err != nil {
-				return nil, fmt.Errorf("recreate request body: %w", err)
-			}
-			current.Body = body
+		current, err := cloneRequest(ctx, req, attempt)
+		if err != nil {
+			return nil, err
 		}
-		resp, err := c.httpClient.Do(current)
-		if err == nil && (resp.StatusCode < http.StatusInternalServerError || !retryableMethod) {
+		resp, requestErr := c.doOnce(current, retryableMethod)
+		if resp != nil {
 			return resp, nil
 		}
-		if resp != nil {
-			_, _ = io.Copy(io.Discard, resp.Body)
-			_ = resp.Body.Close()
-			lastErr = fmt.Errorf("unexpected status: %s", resp.Status)
-		} else {
-			lastErr = err
-		}
+		lastErr = requestErr
 		if !retryableMethod || attempt == c.maxRetry {
 			break
 		}
@@ -68,6 +55,39 @@ func (c *Client) Do(ctx context.Context, req *http.Request) (*http.Response, err
 		return nil, ctx.Err()
 	}
 	return nil, lastErr
+}
+
+func isRetryableMethod(method string) bool {
+	return method == http.MethodGet || method == http.MethodHead || method == http.MethodOptions
+}
+
+func cloneRequest(ctx context.Context, req *http.Request, attempt int) (*http.Request, error) {
+	current := req.Clone(ctx)
+	if attempt == 0 || req.Body == nil {
+		return current, nil
+	}
+	if req.GetBody == nil {
+		return nil, fmt.Errorf("request body is not replayable")
+	}
+	body, err := req.GetBody()
+	if err != nil {
+		return nil, fmt.Errorf("recreate request body: %w", err)
+	}
+	current.Body = body
+	return current, nil
+}
+
+func (c *Client) doOnce(req *http.Request, retryableMethod bool) (*http.Response, error) {
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode < http.StatusInternalServerError || !retryableMethod {
+		return resp, nil
+	}
+	_, _ = io.Copy(io.Discard, resp.Body)
+	_ = resp.Body.Close()
+	return nil, fmt.Errorf("unexpected status: %s", resp.Status)
 }
 
 func waitBackoff(ctx context.Context, attempt int) error {
