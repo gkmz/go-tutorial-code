@@ -75,3 +75,95 @@ func GroupBy[T any, K comparable](values []T, keyFn func(T) K) map[K][]T {
 	}
 	return result
 }
+
+// SearchTree 是一个由调用方定义排序规则的泛型二叉搜索树。
+type SearchTree[T any] struct {
+	compare func(T, T) int
+	root    *searchNode[T]
+}
+
+// searchNode 保存二叉搜索树的一个节点。
+type searchNode[T any] struct {
+	value T
+	left  *searchNode[T]
+	right *searchNode[T]
+}
+
+// NewSearchTree 使用 compare 创建一棵空的二叉搜索树。
+// compare 返回负数、零或正数，分别表示第一个值小于、等于或大于第二个值。
+func NewSearchTree[T any](compare func(T, T) int) *SearchTree[T] {
+	if compare == nil {
+		panic("compare function must not be nil")
+	}
+	return &SearchTree[T]{compare: compare}
+}
+
+// Insert 插入 value；如果 value 已存在，则保持树结构不变。
+func (tree *SearchTree[T]) Insert(value T) {
+	tree.root = insertNode(tree.root, value, tree.compare)
+}
+
+func insertNode[T any](node *searchNode[T], value T, compare func(T, T) int) *searchNode[T] {
+	if node == nil {
+		return &searchNode[T]{value: value}
+	}
+	comparison := compare(value, node.value)
+	if comparison < 0 {
+		node.left = insertNode(node.left, value, compare)
+	} else if comparison > 0 {
+		node.right = insertNode(node.right, value, compare)
+	}
+	return node
+}
+
+// Contains 判断 value 是否存在于树中。
+func (tree *SearchTree[T]) Contains(value T) bool {
+	for node := tree.root; node != nil; {
+		comparison := tree.compare(value, node.value)
+		if comparison == 0 {
+			return true
+		}
+		if comparison < 0 {
+			node = node.left
+		} else {
+			node = node.right
+		}
+	}
+	return false
+}
+
+// Delete 删除 value；如果 value 不存在，则保持树结构不变。
+func (tree *SearchTree[T]) Delete(value T) {
+	tree.root = deleteNode(tree.root, value, tree.compare)
+}
+
+func deleteNode[T any](node *searchNode[T], value T, compare func(T, T) int) *searchNode[T] {
+	if node == nil {
+		return nil
+	}
+	comparison := compare(value, node.value)
+	if comparison < 0 {
+		node.left = deleteNode(node.left, value, compare)
+		return node
+	}
+	if comparison > 0 {
+		node.right = deleteNode(node.right, value, compare)
+		return node
+	}
+
+	if node.left == nil {
+		return node.right
+	}
+	if node.right == nil {
+		return node.left
+	}
+
+	// 两个子节点都存在时，用右子树中的最小节点替换当前值。
+	successor := node.right
+	for successor.left != nil {
+		successor = successor.left
+	}
+	node.value = successor.value
+	node.right = deleteNode(node.right, successor.value, compare)
+	return node
+}

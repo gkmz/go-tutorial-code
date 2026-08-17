@@ -6,7 +6,7 @@
 
 Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用、取消传播和固定 worker 数量。
 
-泛型练习参考实现位于 `exercises`，覆盖反转切片、泛型队列、Reduce、Set 和 GroupBy，并配有测试。
+泛型练习参考实现位于 `exercises`，覆盖反转切片、泛型队列、Reduce、Set、GroupBy 和带比较函数的泛型二叉搜索树，并配有测试。
 
 其他文章的核心示例目录如下：
 
