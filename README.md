@@ -50,7 +50,7 @@
 | `18-advanced/race` | 竞态检测测试 | 已完成 |
 | `18-advanced/fuzz` | 原生模糊测试 | 已完成 |
 | `18-advanced/singleflight` | 请求合并 | 已完成 |
-| `18-advanced/reflection` | 反射基础 | 已完成 |
+| `18-advanced/reflection` | Type、Value、字段修改、标签校验和性能对比 | 已完成 |
 | `18-advanced/escape` | 逃逸分析入口 | 已完成 |
 | `18-advanced/cgo` | CGO 调用边界 | 已完成 macOS/Linux |
 | `18-advanced/wire` | Wire 生成说明 | 已完成 文档示例 |

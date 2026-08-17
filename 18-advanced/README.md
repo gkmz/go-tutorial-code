@@ -16,7 +16,7 @@ Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用�
 | `singleflight` | 请求合并 |
 | `race` | Race Detector 测试 |
 | `generics` | 泛型约束和泛型函数 |
-| `reflection` | Type、Value 和字段读取 |
+| `reflection` | Type、Value、字段读取与修改、标签校验和 benchmark |
 | `memory` | GC 内存统计 |
 | `escape` | 返回值、返回指针、slice、闭包、编译器诊断和分配 benchmark |
 | `pprof` | HTTP pprof 入口 |
@@ -31,6 +31,15 @@ Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用�
 ```bash
 cd escape
 go build -o /tmp/go-escape-example -gcflags='-m=2' .
+go test -run '^$' -bench . -benchmem
+```
+
+反射示例位于 `reflection`，覆盖安全字段读取、字段修改、标签校验和性能对比：
+
+```bash
+cd reflection
+go test ./...
+go test -race ./...
 go test -run '^$' -bench . -benchmem
 ```
 
