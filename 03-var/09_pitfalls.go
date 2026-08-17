@@ -25,7 +25,7 @@ func shadowing() {
 	isVip := true
 
 	if isVip {
-		// ❌ 坑在这里！用 := 声明了一个新的局部 user
+		// 不支持 坑在这里！用 := 声明了一个新的局部 user
 		user, _ := getUserName()
 		fmt.Println("内部用户:", user) // 打印 VipUser
 	}
@@ -36,7 +36,7 @@ func typeSystem() {
 	var a int = 10
 	var b int64 = 20
 
-	// c := a + b // ❌ 编译报错：invalid operation (mismatched types int and int64)
+	// c := a + b // 不支持 编译报错：invalid operation (mismatched types int and int64)
 
 	// 正确做法：显式强转
 	c := int64(a) + b
@@ -45,7 +45,7 @@ func typeSystem() {
 
 func nilPointer() {
 	var p *int
-	// *p = 100 // ❌ 运行时 Panic: invalid memory address or nil pointer dereference
+	// *p = 100 // 不支持 运行时 Panic: invalid memory address or nil pointer dereference
 
 	if p == nil {
 		fmt.Println("p 是 nil，直接解引用会 Panic！")

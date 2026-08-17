@@ -19,7 +19,7 @@ tidy:
 	@cd 03-replace && go mod tidy
 	@cd 04-versions && go mod tidy
 	@cd 05-private && go mod tidy
-	@echo "✓ 完成"
+	@echo "完成"
 
 # 下载依赖
 deps:
@@ -29,13 +29,13 @@ deps:
 	@cd 03-replace && go mod download
 	@cd 04-versions && go mod download
 	@cd 05-private && go mod download
-	@echo "✓ 完成"
+	@echo "完成"
 
 # 清理缓存
 clean:
 	@echo "清理缓存..."
 	@go clean -modcache
-	@echo "✓ 完成"
+	@echo "完成"
 
 # 运行所有示例
 run-all:

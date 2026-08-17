@@ -115,7 +115,7 @@ func main() {
 	if err := validateUser(user2); err != nil {
 		fmt.Println("Validation errors:", err)
 	} else {
-		fmt.Println("✓ User is valid")
+		fmt.Println("User is valid")
 	}
 
 	// 示例 3：批量处理
@@ -131,6 +131,6 @@ func main() {
 		fmt.Println("Batch processing errors:")
 		fmt.Println(err)
 	} else {
-		fmt.Println("✓ All users are valid")
+		fmt.Println("All users are valid")
 	}
 }

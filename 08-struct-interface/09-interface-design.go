@@ -4,7 +4,7 @@ import "fmt"
 
 // 实战建议 1：接口设计原则（接口隔离原则）
 
-// ❌ 不好：接口太大
+// 不支持 不好：接口太大
 type DatabaseBad interface {
 	Connect() error
 	Close() error
@@ -17,7 +17,7 @@ type DatabaseBad interface {
 	Rollback() error
 }
 
-// ✅ 好：拆分成小接口
+// 已完成 好：拆分成小接口
 type Connector interface {
 	Connect() error
 	Close() error

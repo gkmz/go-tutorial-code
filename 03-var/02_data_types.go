@@ -86,7 +86,7 @@ func stringType() {
 	fmt.Printf("string: %s, len: %d\n", s1, len(s1))
 
 	// 字符串是不可变的
-	// s1[0] = 'h'  // ❌ 编译错误
+	// s1[0] = 'h'  // 不支持 编译错误
 
 	// 遍历字符串（按字节）
 	fmt.Print("bytes: ")

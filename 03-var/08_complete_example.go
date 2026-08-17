@@ -81,7 +81,7 @@ func main() {
 		inner := "inner"
 		fmt.Println(outer, inner)
 	}
-	// fmt.Println(inner) // ❌ 编译错误
+	// fmt.Println(inner) // 不支持 编译错误
 	fmt.Println(outer)
 
 	fmt.Println("\n=== 完整示例完成 ===")

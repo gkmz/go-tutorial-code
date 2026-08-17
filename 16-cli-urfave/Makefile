@@ -18,7 +18,7 @@ build:
 	@cd 03-commands && go build -o commands main.go
 	@cd 04-subcommands && go build -o subcommands main.go
 	@cd 05-complete && go build -o complete main.go
-	@echo "✓ 构建完成"
+	@echo "构建完成"
 
 # 运行所有示例
 run:
@@ -45,4 +45,4 @@ clean:
 	@rm -f 03-commands/commands
 	@rm -f 04-subcommands/subcommands
 	@rm -f 05-complete/complete
-	@echo "✓ 清理完成"
+	@echo "清理完成"

@@ -27,13 +27,13 @@ func checkError() {
 
 		// 使用 errors.Is 检查错误链中是否包含特定错误
 		if errors.Is(err, os.ErrNotExist) {
-			fmt.Println("✓ File does not exist (detected with errors.Is)")
+			fmt.Println("File does not exist (detected with errors.Is)")
 		}
 
 		// 使用 errors.As 提取特定类型的错误
 		var pathErr *os.PathError
 		if errors.As(err, &pathErr) {
-			fmt.Printf("✓ Failed path: %s (detected with errors.As)\n", pathErr.Path)
+			fmt.Printf("Failed path: %s (detected with errors.As)\n", pathErr.Path)
 		}
 	}
 }
@@ -42,7 +42,7 @@ func checkError() {
 func readConfigWrong(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {
-		// ❌ 使用 %v 会丢失原始错误
+		// 不支持 使用 %v 会丢失原始错误
 		return fmt.Errorf("failed to read config: %v", err)
 	}
 	defer file.Close()
@@ -56,9 +56,9 @@ func checkErrorWrong() {
 
 		// 无法检测到原始错误
 		if errors.Is(err, os.ErrNotExist) {
-			fmt.Println("✓ File does not exist")
+			fmt.Println("File does not exist")
 		} else {
-			fmt.Println("✗ Cannot detect os.ErrNotExist (because we used %v)")
+			fmt.Println("Error: cannot detect os.ErrNotExist (because we used %v)")
 		}
 	}
 }

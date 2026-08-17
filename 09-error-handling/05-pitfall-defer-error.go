@@ -7,7 +7,7 @@ import (
 
 // 坑 1：忘记检查 defer 中的错误
 
-// ❌ 错误：忽略 Close 的错误
+// 不支持 错误：忽略 Close 的错误
 func processFileWrong(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -20,7 +20,7 @@ func processFileWrong(filename string) error {
 	return nil
 }
 
-// ✅ 正确：检查 Close 的错误
+// 已完成 正确：检查 Close 的错误
 func processFileRight(filename string) (err error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -70,7 +70,7 @@ func main() {
 	if err != nil {
 		fmt.Println("Error:", err)
 	} else {
-		fmt.Println("✓ Success (but Close error was ignored)")
+		fmt.Println("Success (but Close error was ignored)")
 	}
 
 	fmt.Println("\n--- 正确做法 ---")
@@ -78,7 +78,7 @@ func main() {
 	if err != nil {
 		fmt.Println("Error:", err)
 	} else {
-		fmt.Println("✓ Success (Close error was checked)")
+		fmt.Println("Success (Close error was checked)")
 	}
 
 	fmt.Println("\n--- 最佳做法 ---")
@@ -86,7 +86,7 @@ func main() {
 	if err != nil {
 		fmt.Println("Error:", err)
 	} else {
-		fmt.Println("✓ Success (with proper error wrapping)")
+		fmt.Println("Success (with proper error wrapping)")
 	}
 
 	// 教训：

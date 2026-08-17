@@ -74,23 +74,21 @@ func interfaceDemo() {
 	c2 := &Counter{count: 0}
 
 	// 值类型实现了 Getter 接口（只有值接收者方法）
-	fmt.Println("c1 implements Getter:", doGet(c1)) // ✓
-
+	fmt.Println("c1 implements Getter:", doGet(c1))
 	// 指针类型也实现了 Getter 接口
-	fmt.Println("c2 implements Getter:", doGet(c2)) // ✓
-
+	fmt.Println("c2 implements Getter:", doGet(c2))
 	// 值类型不能作为 Incrementer（需要指针接收者方法）
 	// doIncrement(c1) // x 编译错误：Counter does not implement Incrementer
 
 	// 指针类型实现了 Incrementer
-	doIncrement(c2) // ✓
+	doIncrement(c2)
 	fmt.Println("c2 after doIncrement:", c2.GetCount())
 
 	// 值类型不能作为 CounterInterface
 	// doCounter(c1) // x 编译错误：Counter does not implement CounterInterface
 
 	// 指针类型实现了 CounterInterface
-	doCounter(c2) // ✓
+	doCounter(c2)
 }
 
 // Person 演示嵌入类型的方法提升

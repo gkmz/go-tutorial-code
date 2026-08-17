@@ -18,13 +18,13 @@ func untypedVsTyped() {
 	// 有类型常量
 	const piFloat32 float32 = 3.1415926
 	const rInt int = 4
-	// fmt.Println(piFloat32 * rInt)  // ❌ 编译错误：类型不匹配
+	// fmt.Println(piFloat32 * rInt)  // 不支持 编译错误：类型不匹配
 	fmt.Printf("piFloat32 * float32(rInt) = %f\n", piFloat32*float32(rInt))
 
 	// 无类型常量（推荐）
 	const pi = 3.1415926 // 不指定类型
 	const r = 4
-	const area = pi * r * r // ✅ 直接运算，Go 自动处理类型
+	const area = pi * r * r // 已完成 直接运算，Go 自动处理类型
 	fmt.Printf("area = %f (type: %T)\n", area, area)
 
 	// 验证类型推导
@@ -67,7 +67,7 @@ func typedConstNecessity() {
 	checkSize(Small)
 	checkSize(Medium)
 	checkSize(Large)
-	// checkSize(100)  // ❌ 编译错误：类型不匹配
+	// checkSize(100)  // 不支持 编译错误：类型不匹配
 
 	// 验证类型
 	var x MyInt = Small

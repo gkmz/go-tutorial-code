@@ -91,7 +91,7 @@ func globMatch() {
 			if err != nil {
 				fmt.Printf("  Error matching %s: %v\n", path, err)
 			} else if match {
-				fmt.Printf("  ✓ %s matches\n", path)
+				fmt.Printf("  %s matches\n", path)
 			}
 		}
 	}

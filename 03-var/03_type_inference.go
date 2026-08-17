@@ -55,7 +55,7 @@ func noReInference() {
 	fmt.Printf("x = %d, type: %T\n", x, x)
 
 	// 用 := 重新声明会报错
-	// x := "hello"  // ❌ 编译错误：no new variables
+	// x := "hello"  // 不支持 编译错误：no new variables
 }
 
 func main() {

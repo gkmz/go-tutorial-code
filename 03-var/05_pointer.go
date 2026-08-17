@@ -91,7 +91,7 @@ func nilPointer() {
 	fmt.Printf("nil pointer: %v\n", p)
 
 	// nil 指针不能解引用
-	// fmt.Println(*p)  // ❌ panic: invalid memory address
+	// fmt.Println(*p)  // 不支持 panic: invalid memory address
 
 	// 安全做法：检查 nil
 	if p != nil {

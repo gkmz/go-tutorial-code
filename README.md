@@ -36,46 +36,46 @@
 
 | 目录 | 内容 | 状态 |
 | --- | --- | --- |
-| `13-modules` | 多模块、依赖、`replace` 和版本 | ✅ |
-| `14-project-layout` | 项目目录结构说明 | ✅ 文档示例 |
-| `15-project-example` | 计算器项目、测试和构建 | ✅ |
-| `16-cli-urfave` | urfave/cli 命令行程序 | ✅ |
-| `17-file-io` | 文件、流和 IO 组合 | ✅ |
-| `18-advanced/concurrency` | worker pool 和取消 | ✅ 核心示例 |
-| `18-advanced/context` | Context 超时和取消 | ✅ 核心示例 |
-| `18-advanced/generics` | 泛型约束和泛型函数 | ✅ 核心示例 |
-| `18-advanced/gmp` | 调度器运行时信息和百万 Goroutine 调度演示 | ✅ 基础示例 |
-| `18-advanced/memory` | 内存统计 | ✅ 基础示例 |
-| `18-advanced/pprof` | pprof HTTP 入口 | ✅ 基础示例 |
-| `18-advanced/race` | 竞态检测测试 | ✅ |
-| `18-advanced/fuzz` | 原生模糊测试 | ✅ |
-| `18-advanced/singleflight` | 请求合并 | ✅ |
-| `18-advanced/reflection` | 反射基础 | ✅ |
-| `18-advanced/escape` | 逃逸分析入口 | ✅ |
-| `18-advanced/cgo` | CGO 调用边界 | ✅ macOS/Linux |
-| `18-advanced/wire` | Wire 生成说明 | ✅ 文档示例 |
+| `13-modules` | 多模块、依赖、`replace` 和版本 | 已完成 |
+| `14-project-layout` | 项目目录结构说明 | 已完成 文档示例 |
+| `15-project-example` | 计算器项目、测试和构建 | 已完成 |
+| `16-cli-urfave` | urfave/cli 命令行程序 | 已完成 |
+| `17-file-io` | 文件、流和 IO 组合 | 已完成 |
+| `18-advanced/concurrency` | worker pool 和取消 | 已完成 核心示例 |
+| `18-advanced/context` | Context 超时和取消 | 已完成 核心示例 |
+| `18-advanced/generics` | 泛型约束和泛型函数 | 已完成 核心示例 |
+| `18-advanced/gmp` | 调度器运行时信息和百万 Goroutine 调度演示 | 已完成 基础示例 |
+| `18-advanced/memory` | 内存统计 | 已完成 基础示例 |
+| `18-advanced/pprof` | pprof HTTP 入口 | 已完成 基础示例 |
+| `18-advanced/race` | 竞态检测测试 | 已完成 |
+| `18-advanced/fuzz` | 原生模糊测试 | 已完成 |
+| `18-advanced/singleflight` | 请求合并 | 已完成 |
+| `18-advanced/reflection` | 反射基础 | 已完成 |
+| `18-advanced/escape` | 逃逸分析入口 | 已完成 |
+| `18-advanced/cgo` | CGO 调用边界 | 已完成 macOS/Linux |
+| `18-advanced/wire` | Wire 生成说明 | 已完成 文档示例 |
 
 `18-advanced` 当前覆盖教程中列出的关键高级主题。GMP、逃逸和 pprof 示例偏向观察入口，不替代生产故障分析。
 
 ### 第三部分：Web 开发实战
 
 - **目标**：从零到一构建企业级 Web 应用
-- **状态**: ✅核心示例已补齐，综合项目持续完善
+- **状态**: 已完成核心示例已补齐，综合项目持续完善
 
 高级篇示例位于 `18-advanced/`，Web 篇示例位于 `19-web/`。每个子目录都是独立的 Go 包或模块，统一使用 Go 1.25.1。
 
 | 目录 | 内容 | 状态 |
 | --- | --- | --- |
-| `19-web/gin-basic` | Gin 路由和健康检查 | ✅ |
-| `19-web/gorm-crud` | GORM 模型、迁移和 CRUD | ✅ |
-| `19-web/upload-jwt` | 安全上传和 JWT 算法校验 | ✅ 核心示例 |
-| `19-web/graceful` | HTTP 服务优雅关闭 | ✅ |
-| `19-web/middleware` | Gin 中间件和统一错误响应 | ✅ |
-| `19-web/cors` | CORS 白名单和预检请求 | ✅ |
-| `19-web/gorm-advanced` | 事务、关联查询和软删除模型 | ✅ |
-| `19-web/observability` | slog 结构化日志和健康检查 | ✅ |
-| `19-web/deploy` | Docker 和部署检查清单 | ✅ 文档示例 |
-| `19-web/blog-api` | Gin + GORM 综合项目骨架 | ✅ 核心骨架 |
+| `19-web/gin-basic` | Gin 路由和健康检查 | 已完成 |
+| `19-web/gorm-crud` | GORM 模型、迁移和 CRUD | 已完成 |
+| `19-web/upload-jwt` | 安全上传和 JWT 算法校验 | 已完成 核心示例 |
+| `19-web/graceful` | HTTP 服务优雅关闭 | 已完成 |
+| `19-web/middleware` | Gin 中间件和统一错误响应 | 已完成 |
+| `19-web/cors` | CORS 白名单和预检请求 | 已完成 |
+| `19-web/gorm-advanced` | 事务、关联查询和软删除模型 | 已完成 |
+| `19-web/observability` | slog 结构化日志和健康检查 | 已完成 |
+| `19-web/deploy` | Docker 和部署检查清单 | 已完成 文档示例 |
+| `19-web/blog-api` | Gin + GORM 综合项目骨架 | 已完成 核心骨架 |
 
 综合项目是可运行的内存数据库骨架，不包含生产级认证、迁移、外部数据库和完整部署编排；这些边界请参阅教程对应章节。
 

@@ -85,7 +85,7 @@ func main() {
 	if err != nil {
 		fmt.Println("Final error:", err)
 	} else {
-		fmt.Println("✓ Operation succeeded")
+		fmt.Println("Operation succeeded")
 	}
 
 	// 示例 2：高级重试配置
@@ -101,7 +101,7 @@ func main() {
 	if err != nil {
 		fmt.Println("Final error:", err)
 	} else {
-		fmt.Println("✓ Operation succeeded")
+		fmt.Println("Operation succeeded")
 	}
 
 	// 示例 3：永远失败的操作

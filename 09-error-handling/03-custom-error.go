@@ -71,6 +71,6 @@ func main() {
 	fmt.Println("\n--- Valid Input ---")
 	err = validateAge(25)
 	if err == nil {
-		fmt.Println("✓ Age is valid")
+		fmt.Println("Age is valid")
 	}
 }

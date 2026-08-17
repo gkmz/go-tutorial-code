@@ -73,7 +73,7 @@ func processFile(path string) error {
 		return err
 	}
 
-	fmt.Printf("✓ Successfully read %d bytes from %s\n", len(data), path)
+	fmt.Printf("Successfully read %d bytes from %s\n", len(data), path)
 	return nil
 }
 
@@ -81,13 +81,13 @@ func processFile(path string) error {
 func safeExecute(name string, fn func() error) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Printf("✗ %s: Recovered from panic: %v\n", name, r)
+			fmt.Printf("Error: %s: recovered from panic: %v\n", name, r)
 		}
 	}()
 
 	fmt.Printf("\n=== %s ===\n", name)
 	if err := fn(); err != nil {
-		fmt.Printf("✗ Error: %v\n", err)
+		fmt.Printf("Error: %v\n", err)
 	}
 }
 
@@ -131,5 +131,5 @@ func main() {
 		panic("unexpected error")
 	})
 
-	fmt.Println("\n✓ Program completed successfully")
+	fmt.Println("\nProgram completed successfully")
 }

@@ -55,7 +55,7 @@ func varVsShort() {
 	fmt.Println(":= version:", version)
 
 	// 错误示例：已声明的变量不能再用 :=
-	// name := "Python"  // ❌ 编译错误
+	// name := "Python"  // 不支持 编译错误
 	// 正确做法：赋值
 	name = "Python"
 	fmt.Println("after assignment:", name)
