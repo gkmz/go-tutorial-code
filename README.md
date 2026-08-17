@@ -41,8 +41,8 @@
 | `15-project-example` | 计算器项目、测试和构建 | 已完成 |
 | `16-cli-urfave` | urfave/cli 命令行程序 | 已完成 |
 | `17-file-io` | 文件、流和 IO 组合 | 已完成 |
-| `18-advanced/concurrency` | worker pool 和取消 | 已完成 核心示例 |
-| `18-advanced/context` | Context 超时和取消 | 已完成 核心示例 |
+| `18-advanced/concurrency` | worker pool、同步工具、对象池、atomic 和取消 | 已完成 核心示例 |
+| `18-advanced/context` | Context 超时、取消传播、gRPC 与 metadata | 已完成 核心示例 |
 | `18-advanced/generics` | 泛型约束和泛型函数 | 已完成 核心示例 |
 | `18-advanced/gmp` | 调度器运行时信息和百万 Goroutine 调度演示 | 已完成 基础示例 |
 | `18-advanced/memory` | 内存统计 | 已完成 基础示例 |

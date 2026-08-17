@@ -2,9 +2,9 @@
 
 每个子目录都是独立的可执行示例或测试包，使用 Go 1.25.1 验证。
 
-并发进阶练习参考实现位于 `concurrency/exercises`，覆盖互斥锁、读写锁、`sync.Once`、`sync.Map`、`errgroup.SetLimit`、带权信号量和错误取消传播。运行练习测试：
+并发进阶练习参考实现位于 `concurrency/exercises`，覆盖受控 BufferPool、互斥锁、读写锁、`sync.Once`、`sync.Map`、atomic、`errgroup.SetLimit`、带权信号量和错误取消传播。运行练习测试：
 
-Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用、取消传播和固定 worker 数量。
+Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用、取消传播和固定 worker 数量；`context/grpc` 说明截止时间、metadata 和状态码的跨进程边界。
 
 泛型练习参考实现位于 `exercises`，覆盖反转切片、泛型队列、Reduce、Set、GroupBy 和带比较函数的泛型二叉搜索树，并配有测试。
 

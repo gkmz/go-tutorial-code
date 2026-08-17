@@ -1,6 +1,7 @@
 package exercises
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"sync"
@@ -8,6 +9,23 @@ import (
 	"testing"
 	"time"
 )
+
+func TestBufferPool(t *testing.T) {
+	pool := NewBufferPool(64)
+	buffer := pool.Get()
+	buffer.WriteString("request data")
+	if !pool.Put(buffer) {
+		t.Fatal("BufferPool.Put() rejected a small buffer")
+	}
+	if reused := pool.Get(); reused.Len() != 0 {
+		t.Fatalf("reused buffer length = %d", reused.Len())
+	}
+
+	large := bytes.NewBuffer(make([]byte, 0, 128))
+	if pool.Put(large) {
+		t.Fatal("BufferPool.Put() retained an oversized buffer")
+	}
+}
 
 func TestSafeCacheConcurrentAccess(t *testing.T) {
 	cache := NewSafeCache()

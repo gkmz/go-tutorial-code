@@ -2,6 +2,7 @@
 package exercises
 
 import (
+	"bytes"
 	"context"
 	"sync"
 	"sync/atomic"
@@ -9,6 +10,42 @@ import (
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/sync/semaphore"
 )
+
+// BufferPool 复用临时 bytes.Buffer，并拒绝保留容量过大的 Buffer。
+type BufferPool struct {
+	maxCapacity int
+	pool        sync.Pool
+}
+
+// NewBufferPool 创建一个具有最大保留容量的 BufferPool。
+func NewBufferPool(maxCapacity int) *BufferPool {
+	if maxCapacity <= 0 {
+		panic("max capacity must be greater than zero")
+	}
+	return &BufferPool{
+		maxCapacity: maxCapacity,
+		pool: sync.Pool{
+			New: func() any { return new(bytes.Buffer) },
+		},
+	}
+}
+
+// Get 获取一个已重置的 Buffer。
+func (p *BufferPool) Get() *bytes.Buffer {
+	buffer := p.pool.Get().(*bytes.Buffer)
+	buffer.Reset()
+	return buffer
+}
+
+// Put 重置并尝试归还 Buffer；容量超过上限时返回 false 并丢弃。
+func (p *BufferPool) Put(buffer *bytes.Buffer) bool {
+	if buffer == nil || buffer.Cap() > p.maxCapacity {
+		return false
+	}
+	buffer.Reset()
+	p.pool.Put(buffer)
+	return true
+}
 
 // SafeCache 是一个由读写锁保护的字符串缓存。
 type SafeCache struct {
