@@ -14,4 +14,10 @@ func Sum[T Number](values []T) T {
 	return total
 }
 
-func main() { fmt.Println(Sum([]int{1, 2, 3}), Sum([]float64{1.5, 2.5})) }
+func main() {
+	fmt.Println(Sum([]int{1, 2, 3}), Sum([]float64{1.5, 2.5}))
+
+	var calculator Calculator[int]
+	calculator.Add(10, 20)
+	fmt.Println(calculator.History(), calculator.Average())
+}
