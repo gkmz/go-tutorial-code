@@ -28,7 +28,7 @@ cd exercises && go test ./...
 | `memory` | GC 内存统计、分配 benchmark、有界缓存练习答案 |
 | `escape` | 返回值、返回指针、slice、闭包、编译器诊断和分配 benchmark |
 | `pprof` | HTTP pprof、CPU/heap profile 和采集辅助函数 |
-| `cgo` | CGO 调用边界 |
+| `cgo` | CGO 调用边界、字符串所有权、构建标签和调用 benchmark |
 | `fuzz` | 原生模糊测试 |
 | `wire` | Wire 生成流程说明 |
 
@@ -85,6 +85,16 @@ go test ./pprof
 go test -race ./pprof
 go tool pprof http://127.0.0.1:6060/debug/pprof/heap
 go tool pprof 'http://127.0.0.1:6060/debug/pprof/profile?seconds=10'
+```
+
+CGO 示例位于 `cgo`，包含 C 函数调用、Go/C 字符串复制和释放、CGO 构建标签以及 Go/C 调用 benchmark：
+
+```bash
+go run ./cgo
+go test ./cgo
+go test -race ./cgo
+go test -run '^$' -bench . -benchmem ./cgo
+CGO_ENABLED=0 go run ./cgo
 ```
 
 反射示例位于 `reflection`，覆盖安全字段读取、字段修改、标签校验和性能对比：
