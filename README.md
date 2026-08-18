@@ -47,7 +47,7 @@
 | `18-advanced/gmp` | GMP 调度、抢占、计时器、Trace 与 GOMAXPROCS 实验 | 已完成 完整示例与练习 |
 | `18-advanced/memory` | 内存统计 | 已完成 基础示例 |
 | `18-advanced/pprof` | pprof HTTP 入口 | 已完成 基础示例 |
-| `18-advanced/race` | 竞态检测测试 | 已完成 |
+| `18-advanced/race` | Race Detector、修复对照与练习答案 | 已完成 完整示例与练习 |
 | `18-advanced/fuzz` | 原生模糊测试 | 已完成 |
 | `18-advanced/singleflight` | 请求合并、缓存、超时、错误共享、Forget 与实现原理 | 已完成 用法和原理示例 |
 | `18-advanced/reflection` | Type、Value、字段修改、标签校验和性能对比 | 已完成 |

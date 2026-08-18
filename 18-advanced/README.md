@@ -14,7 +14,7 @@ Context 练习参考实现位于 `context/exercises`，覆盖并发下游调用�
 | --- | --- |
 | `gmp` | GMP 调度、抢占、计时器、Trace 与 GOMAXPROCS 实验 |
 | `singleflight` | 请求合并、TTL 缓存、独立等待者超时、Forget 与教学实现 |
-| `race` | Race Detector 测试 |
+| `race` | Race Detector 报告、安全修复、故意失败示例与练习答案 |
 | `generics` | 泛型约束和泛型函数 |
 | `reflection` | Type、Value、字段读取与修改、标签校验和 benchmark |
 | `memory` | GC 内存统计 |
@@ -42,6 +42,14 @@ singleflight 示例位于 `singleflight`，覆盖稳定的并发重叠测试、�
 go run ./singleflight
 go test ./singleflight
 go test -race ./singleflight
+```
+
+Data Race 示例将故意失败的程序与正常测试隔离，避免全量测试被演示代码污染：
+
+```bash
+go test -race ./race/...
+go run -race ./race/cmd/racy  # 预期报告竞争并返回非零状态
+go run -race ./race/cmd/fixed
 ```
 
 逃逸分析示例位于 `escape`，可以分别查看编译器诊断和实际分配次数：
