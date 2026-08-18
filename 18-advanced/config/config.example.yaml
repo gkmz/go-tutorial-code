@@ -1,0 +1,7 @@
+server:
+  host: 127.0.0.1
+  port: 8080
+database:
+  url: postgres://app:replace-me@localhost:5432/app?sslmode=disable
+log:
+  level: info
