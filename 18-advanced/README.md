@@ -27,7 +27,7 @@ cd exercises && go test ./...
 | `reflection` | Type、Value、字段读写、安全动态调用、练习答案和 benchmark |
 | `memory` | GC 内存统计、分配 benchmark、有界缓存练习答案 |
 | `escape` | 返回值、返回指针、slice、闭包、编译器诊断和分配 benchmark |
-| `pprof` | HTTP pprof 入口 |
+| `pprof` | HTTP pprof、CPU/heap profile 和采集辅助函数 |
 | `cgo` | CGO 调用边界 |
 | `fuzz` | 原生模糊测试 |
 | `wire` | Wire 生成流程说明 |
@@ -75,6 +75,16 @@ GODEBUG=gctrace=1 go run ./memory
 cd escape
 go build -o /tmp/go-escape-example -gcflags='-m=2' .
 go test -run '^$' -bench . -benchmem
+```
+
+pprof 示例位于 `pprof`，默认只监听 `127.0.0.1:6060`，包含可观察的示例负载、block/mutex profile 配置以及 `runtime/pprof` 文件采集辅助函数：
+
+```bash
+go run ./pprof
+go test ./pprof
+go test -race ./pprof
+go tool pprof http://127.0.0.1:6060/debug/pprof/heap
+go tool pprof 'http://127.0.0.1:6060/debug/pprof/profile?seconds=10'
 ```
 
 反射示例位于 `reflection`，覆盖安全字段读取、字段修改、标签校验和性能对比：
