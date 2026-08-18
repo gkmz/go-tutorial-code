@@ -1,4 +1,4 @@
-// Command fixed demonstrates synchronized map writes.
+// Command fixed 演示使用互斥锁同步 Map 写入。
 package main
 
 import "sync"

@@ -17,6 +17,9 @@ func CallStringMethod(receiver any, methodName, input string) (string, error) {
 	if !value.IsValid() {
 		return "", errors.New("receiver must not be nil")
 	}
+	if (value.Kind() == reflect.Pointer || value.Kind() == reflect.Interface) && value.IsNil() {
+		return "", errors.New("receiver must not contain a nil value")
+	}
 	method := value.MethodByName(methodName)
 	if !method.IsValid() {
 		return "", fmt.Errorf("method %q does not exist", methodName)

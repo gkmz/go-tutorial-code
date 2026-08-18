@@ -1,4 +1,4 @@
-// Command racy intentionally performs unsynchronized writes for Race Detector demonstrations.
+// Command racy 故意执行未同步写入，用于观察 Race Detector 报告。
 package main
 
 import "sync"
