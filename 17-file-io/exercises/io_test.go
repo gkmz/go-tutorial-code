@@ -37,3 +37,13 @@ func TestCountWords(t *testing.T) {
 		t.Fatalf("counts = %v, err = %v", got, err)
 	}
 }
+
+func TestLowercaseTeePreservesNonASCIIBytes(t *testing.T) {
+	var target, output bytes.Buffer
+	if err := LowercaseTee(bytes.NewBufferString("GO语言"), &target, &output); err != nil {
+		t.Fatal(err)
+	}
+	if target.String() != "go语言" || output.String() != "go语言" {
+		t.Fatalf("target/output = %q/%q", target.String(), output.String())
+	}
+}

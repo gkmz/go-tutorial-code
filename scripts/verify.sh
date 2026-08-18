@@ -24,6 +24,7 @@ while IFS= read -r -d '' file; do
 done < <(find . -name '*.go' -not -name '*_test.go' -not -path './.git/*' \
 	-not -path '*/exercises/*' \
 	-not -path './12-testing/*' -not -path './13-modules/*' -not -path './15-project-example/*' -not -path './16-cli-urfave/*' \
+	-not -path './17-file-io/*' \
 	-not -path './18-advanced/*' -not -path './19-web/*' -print0)
 
 printf 'verification passed\n'

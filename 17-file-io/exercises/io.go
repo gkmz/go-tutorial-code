@@ -6,11 +6,10 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 )
 
 // CopyFile 使用流式复制文件，适合不确定大小的输入。
-func CopyFile(sourcePath, targetPath string) error {
+func CopyFile(sourcePath, targetPath string) (err error) {
 	source, err := os.Open(sourcePath)
 	if err != nil {
 		return fmt.Errorf("open source: %w", err)
@@ -20,8 +19,12 @@ func CopyFile(sourcePath, targetPath string) error {
 	if err != nil {
 		return fmt.Errorf("create target: %w", err)
 	}
-	defer target.Close()
-	if _, err := io.Copy(target, source); err != nil {
+	defer func() {
+		if closeErr := target.Close(); err == nil && closeErr != nil {
+			err = fmt.Errorf("close target: %w", closeErr)
+		}
+	}()
+	if _, err = io.Copy(target, source); err != nil {
 		return fmt.Errorf("copy file: %w", err)
 	}
 	return nil
@@ -34,8 +37,8 @@ func LowercaseTee(source io.Reader, target io.Writer, output io.Writer) error {
 	for {
 		n, err := tee.Read(buffer)
 		if n > 0 {
-			converted := strings.ToLower(string(buffer[:n]))
-			if _, writeErr := output.Write([]byte(converted)); writeErr != nil {
+			converted := lowercaseASCII(buffer[:n])
+			if writeErr := writeFull(output, converted); writeErr != nil {
 				return writeErr
 			}
 		}
@@ -53,11 +56,40 @@ type lowercaseWriter struct {
 }
 
 func (w lowercaseWriter) Write(data []byte) (int, error) {
-	converted := strings.ToLower(string(data))
-	if _, err := io.WriteString(w.target, converted); err != nil {
-		return 0, err
+	converted := lowercaseASCII(data)
+	written, err := w.target.Write(converted)
+	if err != nil {
+		return written, err
+	}
+	if written != len(converted) {
+		return written, io.ErrShortWrite
 	}
 	return len(data), nil
+}
+
+func writeFull(writer io.Writer, data []byte) error {
+	for len(data) > 0 {
+		written, err := writer.Write(data)
+		if err != nil {
+			return err
+		}
+		if written == 0 {
+			return io.ErrShortWrite
+		}
+		data = data[written:]
+	}
+	return nil
+}
+
+func lowercaseASCII(data []byte) []byte {
+	output := make([]byte, len(data))
+	for index, value := range data {
+		if value >= 'A' && value <= 'Z' {
+			value += 'a' - 'A'
+		}
+		output[index] = value
+	}
+	return output
 }
 
 // CountWords 使用 Scanner 统计空白分隔的单词。
