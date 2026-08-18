@@ -24,7 +24,7 @@ cd exercises && go test ./...
 | `singleflight` | 请求合并、TTL 缓存、独立等待者超时、Forget 与教学实现 |
 | `race` | Race Detector 报告、安全修复、故意失败示例与练习答案 |
 | `generics` | 泛型约束和泛型函数 |
-| `reflection` | Type、Value、字段读取与修改、标签校验和 benchmark |
+| `reflection` | Type、Value、字段读写、安全动态调用、练习答案和 benchmark |
 | `memory` | GC 内存统计 |
 | `escape` | 返回值、返回指针、slice、闭包、编译器诊断和分配 benchmark |
 | `pprof` | HTTP pprof 入口 |

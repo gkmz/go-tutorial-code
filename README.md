@@ -50,7 +50,7 @@
 | `18-advanced/race` | Race Detector、修复对照与练习答案 | 已完成 完整示例与练习 |
 | `18-advanced/fuzz` | 原生模糊测试 | 已完成 |
 | `18-advanced/singleflight` | 请求合并、缓存、超时、错误共享、Forget 与实现原理 | 已完成 用法和原理示例 |
-| `18-advanced/reflection` | Type、Value、字段修改、标签校验和性能对比 | 已完成 |
+| `18-advanced/reflection` | Type、Value、安全调用、嵌套校验和性能对比 | 已完成 完整示例与练习 |
 | `18-advanced/escape` | 逃逸分析入口 | 已完成 |
 | `18-advanced/cgo` | CGO 调用边界 | 已完成 macOS/Linux |
 | `18-advanced/wire` | Wire 生成说明 | 已完成 文档示例 |
