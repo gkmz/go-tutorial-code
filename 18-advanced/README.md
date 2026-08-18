@@ -29,6 +29,7 @@ cd exercises && go test ./...
 | `escape` | 返回值、返回指针、slice、闭包、编译器诊断和分配 benchmark |
 | `pprof` | HTTP pprof、CPU/heap profile 和采集辅助函数 |
 | `cgo` | CGO 调用边界、字符串所有权、构建标签和调用 benchmark |
+| `logging` | slog、zap、脱敏、HTTP 请求日志、轮转与 benchmark |
 | `fuzz` | 原生模糊测试 |
 | `wire` | Wire 生成流程说明 |
 
@@ -95,6 +96,15 @@ go test ./cgo
 go test -race ./cgo
 go test -run '^$' -bench . -benchmem ./cgo
 CGO_ENABLED=0 go run ./cgo
+```
+
+日志管理示例位于 `logging`，包含 slog Handler、敏感字段脱敏、HTTP 请求日志、zap 动态级别、文件轮转和公平 benchmark：
+
+```bash
+go test ./logging
+go vet ./logging
+go test -race ./logging
+go test -run '^$' -bench . -benchmem ./logging
 ```
 
 反射示例位于 `reflection`，覆盖安全字段读取、字段修改、标签校验和性能对比：
