@@ -25,7 +25,7 @@ cd exercises && go test ./...
 | `race` | Race Detector 报告、安全修复、故意失败示例与练习答案 |
 | `generics` | 泛型约束和泛型函数 |
 | `reflection` | Type、Value、字段读写、安全动态调用、练习答案和 benchmark |
-| `memory` | GC 内存统计 |
+| `memory` | GC 内存统计、分配 benchmark、有界缓存练习答案 |
 | `escape` | 返回值、返回指针、slice、闭包、编译器诊断和分配 benchmark |
 | `pprof` | HTTP pprof 入口 |
 | `cgo` | CGO 调用边界 |
@@ -58,6 +58,15 @@ Data Race 示例将故意失败的程序与正常测试隔离，避免全量测�
 go test -race ./race/...
 go run -race ./race/cmd/racy  # 预期报告竞争并返回非零状态
 go run -race ./race/cmd/fixed
+```
+
+内存管理示例位于 `memory`，可以观察分配、手动 GC 和存活堆变化，也可以运行预分配 benchmark 与有界缓存练习答案：
+
+```bash
+go run ./memory
+go test ./memory
+go test -run '^$' -bench 'Benchmark(GrowingSlice|PreallocatedSlice|BoundedCacheSet)$' -benchmem ./memory
+GODEBUG=gctrace=1 go run ./memory
 ```
 
 逃逸分析示例位于 `escape`，可以分别查看编译器诊断和实际分配次数：
