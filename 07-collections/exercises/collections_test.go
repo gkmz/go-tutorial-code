@@ -17,6 +17,25 @@ func TestCollectionOperations(t *testing.T) {
 	if !reflect.DeepEqual(values, []int{3, 2, 1}) {
 		t.Fatalf("Reverse = %v", values)
 	}
+	if got := EvenValues([]int{1, 2, 3, 4}); !reflect.DeepEqual(got, []int{2, 4}) {
+		t.Fatalf("EvenValues = %v", got)
+	}
+	source := []int{1, 2, 3}
+	clone := Clone(source)
+	clone[0] = 99
+	if source[0] != 1 {
+		t.Fatalf("Clone shares source: %v", source)
+	}
+	appended := LimitedAppend(source[:2], 9)
+	if !reflect.DeepEqual(appended, []int{1, 2, 9}) || !reflect.DeepEqual(source, []int{1, 2, 3}) {
+		t.Fatalf("LimitedAppend changed source: appended=%v source=%v", appended, source)
+	}
+	if value, ok := LookupZero(map[string]int{"zero": 0}, "zero"); !ok || value != 0 {
+		t.Fatal("existing zero value was not found")
+	}
+	if _, ok := LookupZero(map[string]int{"zero": 0}, "missing"); ok {
+		t.Fatal("missing key was reported as present")
+	}
 }
 
 func TestCache(t *testing.T) {

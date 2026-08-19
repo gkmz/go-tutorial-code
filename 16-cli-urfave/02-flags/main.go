@@ -23,8 +23,9 @@ func main() {
 	// 全局 Flag
 	app.Flags = []cli.Flag{
 		&cli.BoolFlag{
-			Name:        "verbose",
-			Aliases:     []string{"v"},
+			Name: "verbose",
+			// -v 已被 urfave/cli 用作版本选项，详细模式使用 -V 避免冲突。
+			Aliases:     []string{"V"},
 			Usage:       "显示详细信息",
 			Destination: &verbose,
 		},

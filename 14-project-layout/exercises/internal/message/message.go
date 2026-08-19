@@ -8,3 +8,11 @@ func Format(name string) string {
 	}
 	return "Hello, " + name + "!"
 }
+
+// Farewell 将名称格式化为命令行告别语。
+func Farewell(name string) string {
+	if name == "" {
+		name = "Go"
+	}
+	return "Goodbye, " + name + "!"
+}

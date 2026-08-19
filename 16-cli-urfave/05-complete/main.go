@@ -25,8 +25,9 @@ func main() {
 	// 全局 Flag
 	app.Flags = []cli.Flag{
 		&cli.BoolFlag{
-			Name:        "verbose",
-			Aliases:     []string{"v"},
+			Name: "verbose",
+			// -v 已被 urfave/cli 用作版本选项，详细模式使用 -V 避免冲突。
+			Aliases:     []string{"V"},
 			Usage:       "显示详细信息",
 			Destination: &verbose,
 		},
@@ -51,8 +52,9 @@ func main() {
 	// 定义命令
 	app.Commands = []*cli.Command{
 		{
-			Name:    "hello",
-			Aliases: []string{"h"},
+			Name: "hello",
+			// h 已被内置 help 命令占用，使用 H 避免别名冲突。
+			Aliases: []string{"H"},
 			Usage:   "向你问好",
 			Flags: []cli.Flag{
 				&cli.StringFlag{

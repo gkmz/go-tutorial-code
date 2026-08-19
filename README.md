@@ -17,7 +17,7 @@
 | --- | --- |
 | `00-setup` | 环境准备 |
 | `01-intro` | Go 简介与程序结构 |
-| `02-style` | 代码风格 |
+| `02-style` | 代码风格、泛型条件选择、变量遮蔽、接收者与显式初始化练习 |
 | `03-var` | 变量、类型、指针和作用域 |
 | `04-const` | 常量、`iota` 和枚举模式 |
 | `05-func` | 函数、闭包、方法和 `defer` |
@@ -26,8 +26,8 @@
 | `08-struct-interface` | 结构体、接口和依赖注入 |
 | `09-error-handling` | 错误处理和重试 |
 | `10-concurrency` | Goroutine、Channel 和并发工具 |
-| `11-stdlib` | 常用标准库 |
-| `12-testing` | 单元测试、表格测试和测试辅助工具 |
+| `11-stdlib` | 常用标准库、Go 1.25 随机数边界和 10 道练习答案 |
+| `12-testing` | 单元测试、并行与 Race、基准、覆盖率和 9 道练习答案 |
 
 ### 第二部分：工程实践和高级教程
 
@@ -37,7 +37,7 @@
 | 目录 | 内容 | 状态 |
 | --- | --- | --- |
 | `13-modules` | 多模块、依赖、`replace` 和版本 | 已完成 |
-| `14-project-layout` | 项目目录结构说明 | 已完成 文档示例 |
+| `14-project-layout` | 项目目录边界、internal、pkg 和多入口说明 | 已完成 文档与验收说明 |
 | `15-project-example` | 计算器项目、测试和构建 | 已完成 |
 | `16-cli-urfave` | urfave/cli 命令行程序 | 已完成 |
 | `17-file-io` | Reader/Writer、大小限制、流式复制和练习答案 | 已完成 完整示例与练习 |
@@ -48,14 +48,14 @@
 | `18-advanced/memory` | 内存统计 | 已完成 基础示例 |
 | `18-advanced/pprof` | pprof HTTP 入口 | 已完成 基础示例 |
 | `18-advanced/race` | Race Detector、修复对照与练习答案 | 已完成 完整示例与练习 |
-| `18-advanced/fuzz` | 原生模糊测试 | 已完成 |
+| `18-advanced/fuzz` | UTF-8、JSON 解析、失败语料与原生模糊测试 | 已完成 完整示例与测试 |
 | `18-advanced/singleflight` | 请求合并、缓存、超时、错误共享、Forget 与实现原理 | 已完成 用法和原理示例 |
 | `18-advanced/reflection` | Type、Value、安全调用、嵌套校验和性能对比 | 已完成 完整示例与练习 |
 | `18-advanced/escape` | 逃逸分析入口 | 已完成 |
 | `18-advanced/cgo` | CGO 调用边界 | 已完成 macOS/Linux |
-| `18-advanced/config` | 配置来源、Viper、校验、脱敏和原子快照 | 已完成 完整示例与练习 |
+| `18-advanced/config` | 配置来源、Viper、校验、脱敏、原子快照和文件热更新 | 已完成 完整示例与练习 |
 | `18-advanced/logging` | slog、zap、脱敏、HTTP 中间件、轮转和 benchmark | 已完成 完整示例与练习 |
-| `18-advanced/wire` | Wire 生成说明 | 已完成 文档示例 |
+| `18-advanced/wire` | 手工装配、Wire 生成、错误传播、清理函数和练习答案 | 已完成 完整示例与测试 |
 
 `18-advanced` 当前覆盖教程中列出的关键高级主题。GMP、逃逸和 pprof 示例偏向观察入口，不替代生产故障分析。反射、GC、CGO、泛型、模糊测试和 Wire 文章中的示例以对应子目录为准；涉及真实外部服务、数据库或生成器的内容会在目录 README 中注明前置条件。
 

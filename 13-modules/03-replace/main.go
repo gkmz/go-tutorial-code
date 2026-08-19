@@ -27,5 +27,5 @@ func main() {
 	fmt.Println("  3. 测试未发布的代码")
 	fmt.Println()
 
-	fmt.Println("注意  注意: 提交前记得删除 replace 指令")
+	fmt.Println("提交前确认 CI 和其他开发环境能够解析 replace 目标")
 }

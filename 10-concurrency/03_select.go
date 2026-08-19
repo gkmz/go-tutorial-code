@@ -1,24 +1,26 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"sync"
 	"time"
 )
 
-// Select 多路复用示例
+// main 演示 select 的多路等待、超时、非阻塞接收和取消。
 
 func main() {
 	fmt.Println("=== 示例 1: 基本 Select ===")
-	ch1 := make(chan string)
-	ch2 := make(chan string)
+	ch1 := make(chan string, 1)
+	ch2 := make(chan string, 1)
 
 	go func() {
-		time.Sleep(1 * time.Second)
+		time.Sleep(20 * time.Millisecond)
 		ch1 <- "from ch1"
 	}()
 
 	go func() {
-		time.Sleep(2 * time.Second)
+		time.Sleep(40 * time.Millisecond)
 		ch2 <- "from ch2"
 	}()
 
@@ -30,17 +32,17 @@ func main() {
 	}
 
 	fmt.Println("\n=== 示例 2: 超时控制 ===")
-	ch3 := make(chan string)
+	ch3 := make(chan string, 1)
 
 	go func() {
-		time.Sleep(2 * time.Second)
+		time.Sleep(40 * time.Millisecond)
 		ch3 <- "result"
 	}()
 
 	select {
 	case result := <-ch3:
 		fmt.Println("Got:", result)
-	case <-time.After(1 * time.Second):
+	case <-time.After(10 * time.Millisecond):
 		fmt.Println("Timeout!")
 	}
 
@@ -55,34 +57,62 @@ func main() {
 	}
 
 	fmt.Println("\n=== 示例 4: 监听多个 Channel ===")
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	ch5 := make(chan int)
 	ch6 := make(chan int)
-	quit := make(chan bool)
+	var producers sync.WaitGroup
+	producers.Add(2)
 
 	go func() {
+		defer producers.Done()
 		for i := 0; i < 3; i++ {
-			ch5 <- i
-			time.Sleep(500 * time.Millisecond)
-		}
-		quit <- true
-	}()
-
-	go func() {
-		for i := 0; i < 3; i++ {
-			ch6 <- i * 10
-			time.Sleep(700 * time.Millisecond)
+			select {
+			case ch5 <- i:
+			case <-ctx.Done():
+				return
+			}
+			time.Sleep(5 * time.Millisecond)
 		}
 	}()
 
-	for {
+	go func() {
+		defer producers.Done()
+		for i := 0; i < 3; i++ {
+			select {
+			case ch6 <- i * 10:
+			case <-ctx.Done():
+				return
+			}
+			time.Sleep(7 * time.Millisecond)
+		}
+	}()
+
+	go func() {
+		producers.Wait()
+		close(ch5)
+		close(ch6)
+	}()
+	for ch5 != nil || ch6 != nil {
 		select {
-		case msg1 := <-ch5:
+		case msg1, ok := <-ch5:
+			if !ok {
+				ch5 = nil
+				continue
+			}
 			fmt.Println("From ch5:", msg1)
-		case msg2 := <-ch6:
+		case msg2, ok := <-ch6:
+			if !ok {
+				ch6 = nil
+				continue
+			}
 			fmt.Println("From ch6:", msg2)
-		case <-quit:
-			fmt.Println("Quit")
+		case <-ctx.Done():
 			return
 		}
+		if ch5 == nil && ch6 == nil {
+			break
+		}
 	}
+	cancel()
 }

@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 )
 
@@ -101,4 +102,21 @@ func CountWords(source io.Reader) (map[string]int, error) {
 		counts[scanner.Text()]++
 	}
 	return counts, scanner.Err()
+}
+
+// CountLongWords 使用自定义 Scanner 缓冲读取长 token。
+func CountLongWords(source io.Reader, maxToken int) (map[string]int, error) {
+	counts := make(map[string]int)
+	scanner := bufio.NewScanner(source)
+	scanner.Buffer(make([]byte, 1024), maxToken)
+	scanner.Split(bufio.ScanWords)
+	for scanner.Scan() {
+		counts[scanner.Text()]++
+	}
+	return counts, scanner.Err()
+}
+
+// ReadFSFile 从抽象文件系统中读取指定路径。
+func ReadFSFile(fileSystem fs.FS, name string) ([]byte, error) {
+	return fs.ReadFile(fileSystem, name)
 }

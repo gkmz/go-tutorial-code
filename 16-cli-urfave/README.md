@@ -1,6 +1,6 @@
 # CLI 工具开发示例
 
-使用 `urfave/cli` 框架开发命令行工具的完整示例。
+本目录对应基础篇《使用 CLI 开发命令行程序》，使用 Go 1.25.1 和 [urfave/cli v2](https://cli.urfave.org/v2/)。示例按复杂度递进，练习模块使用缓冲区测试完整命令行为。
 
 ## 目录结构
 
@@ -11,6 +11,7 @@
 ├── 03-commands/        # 添加命令
 ├── 04-subcommands/     # 子命令示例
 ├── 05-complete/        # 完整示例
+├── exercises/           # 可测试的 CLI 练习答案
 └── README.md
 ```
 
@@ -56,6 +57,9 @@ go build -o my-cli main.go
 - `StringSliceFlag`：字符串数组
 - `DurationFlag`：时间间隔
 
+本示例保留框架默认的 `-v/--version`，因此详细模式使用 `-V/--verbose`，不要为 verbose 再注册 `-v`。
+同样地，`h` 通常已被内置 `help` 命令占用，业务命令不要重复注册该别名。
+
 ## 生命周期
 
 ```
@@ -68,5 +72,24 @@ Before → Action → After
 
 ## 参考资源
 
-- 官方文档：https://cli.urfave.org/v2/
-- GitHub：https://github.com/urfave/cli
+- 官方文档：[cli.urfave.org/v2](https://cli.urfave.org/v2/)
+- 源码仓库：[github.com/urfave/cli](https://github.com/urfave/cli)
+
+## 验证
+
+每个示例都是独立模块：
+
+```bash
+for dir in 01-hello 02-flags 03-commands 04-subcommands 05-complete; do
+  (cd "$dir" && go test ./... && go vet ./...)
+done
+
+cd exercises
+go test ./...
+go test -race ./...
+go vet ./...
+```
+
+练习答案覆盖 `greet hello --name`、`hello --upper` 和 `count --number` 的完整参数解析、输出捕获与负数校验。多平台构建仍通过 `GOOS`、`GOARCH` 练习；示例中的天气和当前时间输出依赖运行时，不应做精确字符串断言。
+
+练习模块的公开入口是 `exercises.NewApp`，错误路径使用 `ErrNegativeCount` 判断。测试通过 `cli.App.Run` 在进程内模拟真实命令行，不调用 `os.Exit`。

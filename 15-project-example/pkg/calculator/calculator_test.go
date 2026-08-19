@@ -40,4 +40,8 @@ func TestHistory(t *testing.T) {
 	if len(history) != 2 {
 		t.Errorf("History length = %d; want 2", len(history))
 	}
+	history[0] = "changed by caller"
+	if calc.History()[0] == history[0] {
+		t.Fatal("History() returned the internal slice")
+	}
 }

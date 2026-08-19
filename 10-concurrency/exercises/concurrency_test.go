@@ -8,6 +8,15 @@ import (
 	"testing"
 )
 
+func TestChannelExercises(t *testing.T) {
+	if got := SendAndReceive(42); got != 42 {
+		t.Fatalf("SendAndReceive = %d, want 42", got)
+	}
+	if got := CloseAndDrain([]int{1, 2, 3}); !reflect.DeepEqual(got, []int{1, 2, 3}) {
+		t.Fatalf("CloseAndDrain = %v", got)
+	}
+}
+
 func TestSafeCounter(t *testing.T) {
 	var counter SafeCounter
 	var wg sync.WaitGroup
@@ -42,5 +51,13 @@ func TestRunPoolAndFanIn(t *testing.T) {
 	sort.Ints(merged)
 	if !reflect.DeepEqual(merged, []int{1, 2}) {
 		t.Fatalf("fan-in results = %v", merged)
+	}
+}
+
+func TestRunPoolHonorsCancellation(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if results := RunPool(ctx, []int{1, 2, 3}, 2); len(results) != 0 {
+		t.Fatalf("cancelled pool returned %v, want no results", results)
 	}
 }

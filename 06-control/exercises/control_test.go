@@ -31,3 +31,23 @@ func TestIncrementAges(t *testing.T) {
 		t.Fatalf("ages = %v", ages)
 	}
 }
+
+func TestStableMapKeysAndLabelSearch(t *testing.T) {
+	if got := StableMapKeys(map[string]int{"b": 2, "a": 1}); !reflect.DeepEqual(got, []string{"a", "b"}) {
+		t.Fatalf("keys = %v, want [a b]", got)
+	}
+	row, column, found := FindWithLabel([][]int{{1, 2}, {3, 4}}, 4)
+	if !found || row != 1 || column != 1 {
+		t.Fatalf("label search = %d, %d, %v", row, column, found)
+	}
+}
+
+func TestIsTypedNil(t *testing.T) {
+	var pointer *int
+	if !IsTypedNil(pointer) {
+		t.Fatal("typed nil pointer was not detected")
+	}
+	if IsTypedNil(1) {
+		t.Fatal("integer must not be typed nil")
+	}
+}

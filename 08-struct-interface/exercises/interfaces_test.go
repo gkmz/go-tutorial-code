@@ -18,12 +18,15 @@ func TestAnimalAndEmbedding(t *testing.T) {
 }
 
 func TestShapesAndTypeSwitch(t *testing.T) {
-	area := TotalArea([]Shape{Rectangle{Width: 2, Height: 3}, Circle{Radius: 1}})
-	if math.Abs(area-(6+math.Pi)) > 1e-9 {
+	area := TotalArea([]Shape{Rectangle{Width: 2, Height: 3}, Circle{Radius: 1}, Triangle{A: 3, B: 4, C: 5}})
+	if math.Abs(area-(6+math.Pi+6)) > 1e-9 {
 		t.Fatalf("area = %v", area)
 	}
 	if DescribeType(1) != "int" || DescribeType([]int{}) != "unknown" {
 		t.Fatal("unexpected type description")
+	}
+	if SafeEqual([]int{1}, []int{1}) {
+		t.Fatal("non-comparable slices must not compare equal")
 	}
 }
 

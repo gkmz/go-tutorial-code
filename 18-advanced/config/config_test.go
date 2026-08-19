@@ -1,10 +1,13 @@
 package config
 
 import (
+	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestLoadEnvironmentOverridesFile(t *testing.T) {
@@ -101,5 +104,74 @@ func TestRedactedSummaryDoesNotExposeCredentials(t *testing.T) {
 	}
 	if !strings.Contains(summary, "db.example.com") || !strings.Contains(summary, "orders") {
 		t.Fatalf("summary misses safe fields: %q", summary)
+	}
+}
+
+func TestWatchFilePublishesOnlyValidSnapshots(t *testing.T) {
+	filename := filepath.Join(t.TempDir(), "config.yaml")
+	writeTestConfig(t, filename, 8080)
+	initial, err := Load(filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+	store, err := NewStore(initial)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	t.Cleanup(cancel)
+	errorsChannel := make(chan error, 8)
+	done := make(chan error, 1)
+	go func() {
+		done <- WatchFile(ctx, filename, store, WatchOptions{
+			Debounce: 20 * time.Millisecond,
+			OnError: func(err error) {
+				errorsChannel <- err
+			},
+		})
+	}()
+
+	// 重复写入可以避免测试第一次保存发生在 watcher 完成初始化之前。
+	awaitSnapshotPort(t, filename, store, 9090)
+	writeTestConfig(t, filename, 0)
+	select {
+	case <-errorsChannel:
+	case <-time.After(2 * time.Second):
+		t.Fatal("timed out waiting for invalid reload error")
+	}
+	if got := store.Snapshot().Server.Port; got != 9090 {
+		t.Fatalf("snapshot port after invalid reload = %d, want 9090", got)
+	}
+
+	cancel()
+	select {
+	case watchErr := <-done:
+		if watchErr != nil {
+			t.Fatalf("WatchFile() error = %v", watchErr)
+		}
+	case <-time.After(2 * time.Second):
+		t.Fatal("timed out waiting for watcher shutdown")
+	}
+}
+
+func awaitSnapshotPort(t *testing.T, filename string, store *Store, want int) {
+	t.Helper()
+	deadline := time.Now().Add(2 * time.Second)
+	for time.Now().Before(deadline) {
+		writeTestConfig(t, filename, want)
+		time.Sleep(30 * time.Millisecond)
+		if store.Snapshot().Server.Port == want {
+			return
+		}
+	}
+	t.Fatalf("snapshot port = %d, want %d", store.Snapshot().Server.Port, want)
+}
+
+func writeTestConfig(t *testing.T, filename string, port int) {
+	t.Helper()
+	content := []byte(fmt.Sprintf("server:\n  host: 127.0.0.1\n  port: %d\ndatabase:\n  url: postgres://db\nlog:\n  level: info\n", port))
+	if err := os.WriteFile(filename, content, 0o600); err != nil {
+		t.Fatal(err)
 	}
 }

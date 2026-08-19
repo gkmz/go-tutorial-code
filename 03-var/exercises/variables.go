@@ -1,6 +1,8 @@
 // Package exercises 提供变量章节练习的参考实现。
 package exercises
 
+import "fmt"
+
 // Weekday 表示一周中的一天。
 type Weekday int
 
@@ -39,4 +41,19 @@ func BytesAndRunes(value string) ([]byte, []rune) {
 // IntegerBounds 返回常见整数类型的最大值。
 func IntegerBounds() (int8, uint8, int32, int64) {
 	return 1<<7 - 1, 1<<8 - 1, 1<<31 - 1, 1<<63 - 1
+}
+
+// ReplaceUser 在需要时更新外层用户值，并保留加载错误。
+func ReplaceUser(current string, shouldReplace bool, load func() (string, error)) (string, error) {
+	if !shouldReplace {
+		return current, nil
+	}
+
+	// 使用赋值而不是短声明，确保更新的是当前函数作用域中的变量。
+	var err error
+	current, err = load()
+	if err != nil {
+		return "", fmt.Errorf("load replacement user: %w", err)
+	}
+	return current, nil
 }

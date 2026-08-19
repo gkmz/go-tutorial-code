@@ -1,6 +1,6 @@
 # Makefile for Go Modules examples
 
-.PHONY: help tidy deps clean run-all
+.PHONY: help tidy deps clean run-all test
 
 help:
 	@echo "Go Modules 示例 Makefile"
@@ -10,6 +10,7 @@ help:
 	@echo "  make deps      - 下载所有示例的依赖"
 	@echo "  make clean     - 清理缓存"
 	@echo "  make run-all   - 运行所有示例"
+	@echo "  make test      - 验证练习和 workspace 示例"
 
 # 整理依赖
 tidy:
@@ -53,3 +54,10 @@ run-all:
 	@echo ""
 	@echo "=== 05-private ==="
 	@cd 05-private && go run main.go
+	@echo ""
+	@echo "=== 06-workspace ==="
+	@cd 06-workspace && go run ./app
+
+test:
+	@cd exercises && go test ./...
+	@cd 06-workspace && go test ./app/... ./greeter/...

@@ -61,39 +61,26 @@ func calculateTrig(angle float64) {
 
 // ============ math/rand 包 ============
 
-// initRand 初始化随机数种子
-// 重要：必须在 main 或使用随机数之前调用
-func initRand() {
-	// 使用当前时间作为种子，确保每次运行结果不同
-	// 如果不设置种子，默认种子是 1，每次运行结果相同
-	rand.Seed(time.Now().UnixNano())
-}
-
 // randomInt 生成指定范围内的随机整数
-func randomInt(min, max int) int {
-	// rand.Intn(n) 生成 [0, n) 的随机整数
-	// 要生成 [min, max]，需要 rand.Intn(max-min+1) + min
-	return rand.Intn(max-min+1) + min
+func randomInt(random *rand.Rand, minValue, maxValue int) int {
+	return random.Intn(maxValue-minValue+1) + minValue
 }
 
 // randomFloat 生成指定范围内的随机浮点数
-func randomFloat(min, max float64) float64 {
-	// rand.Float64() 生成 [0, 1) 的随机浮点数
-	return min + rand.Float64()*(max-min)
+func randomFloat(random *rand.Rand, minValue, maxValue float64) float64 {
+	return minValue + random.Float64()*(maxValue-minValue)
 }
 
 // shuffleSlice 打乱切片顺序
-func shuffleSlice(slice []string) {
-	// rand.Shuffle 打乱切片
-	// 第一个参数是长度，第二个是交换函数
-	rand.Shuffle(len(slice), func(i, j int) {
+func shuffleSlice(random *rand.Rand, slice []string) {
+	random.Shuffle(len(slice), func(i, j int) {
 		slice[i], slice[j] = slice[j], slice[i]
 	})
 }
 
 // randomChoice 从切片中随机选择一个元素
-func randomChoice[T any](slice []T) T {
-	index := rand.Intn(len(slice))
+func randomChoice[T any](random *rand.Rand, slice []T) T {
+	index := random.Intn(len(slice))
 	return slice[index]
 }
 
@@ -256,8 +243,8 @@ func buildBytes() []byte {
 // ============ 主函数 ============
 
 func main() {
-	// 初始化随机数
-	initRand()
+	// 局部随机源明确了状态所有权；它仅用于非安全随机任务。
+	random := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	// math 示例
 	fmt.Println("=== math ===")
@@ -268,8 +255,8 @@ func main() {
 
 	// math/rand 示例
 	fmt.Println("\n=== math/rand ===")
-	fmt.Printf("Random int [1,100]: %d\n", randomInt(1, 100))
-	fmt.Printf("Random float [0.0,1.0]: %.4f\n", randomFloat(0, 1))
+	fmt.Printf("Random int [1,100]: %d\n", randomInt(random, 1, 100))
+	fmt.Printf("Random float [0.0,1.0]: %.4f\n", randomFloat(random, 0, 1))
 
 	// sort 示例
 	fmt.Println("\n=== sort ===")
@@ -305,7 +292,7 @@ func main() {
 
 	// 随机选择示例
 	colors := []string{"red", "green", "blue"}
-	fmt.Printf("Random color: %s\n", randomChoice(colors))
-	shuffleSlice(colors)
+	fmt.Printf("Random color: %s\n", randomChoice(random, colors))
+	shuffleSlice(random, colors)
 	fmt.Println("Shuffled colors:", colors)
 }

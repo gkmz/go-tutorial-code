@@ -33,6 +33,36 @@ func Reverse(values []int) {
 	}
 }
 
+// EvenValues 返回输入切片中的偶数，结果不与输入共享底层数组。
+func EvenValues(values []int) []int {
+	result := make([]int, 0, len(values))
+	for _, value := range values {
+		if value%2 == 0 {
+			result = append(result, value)
+		}
+	}
+	return result
+}
+
+// Clone 返回输入切片的独立副本。
+func Clone(values []int) []int {
+	result := make([]int, len(values))
+	copy(result, values)
+	return result
+}
+
+// LimitedAppend 在限制容量的子切片上追加元素，避免覆盖源切片的后续容量。
+func LimitedAppend(values []int, value int) []int {
+	limited := values[:len(values):len(values)]
+	return append(limited, value)
+}
+
+// LookupZero 区分键不存在和键存在但值为零。
+func LookupZero(values map[string]int, key string) (int, bool) {
+	value, ok := values[key]
+	return value, ok
+}
+
 // Cache 是一个由读写锁保护的并发安全缓存。
 type Cache struct {
 	mu     sync.RWMutex

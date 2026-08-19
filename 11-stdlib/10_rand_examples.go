@@ -6,113 +6,80 @@ import (
 	"time"
 )
 
-// initRand 初始化随机数种子
-// 重要：必须在 main 或使用随机数之前调用
-func initRand() {
-	// 使用当前时间作为种子，确保每次运行结果不同
-	// 如果不设置种子，默认种子是 1，每次运行结果相同
-	rand.Seed(time.Now().UnixNano())
+// randomInt 输出多个整数区间的随机样本。
+func randomInt(random *rand.Rand) {
+	// Intn(n) 生成 [0, n) 内的整数。
+	fmt.Println("Random [0, 100):", random.Intn(100))
+	fmt.Println("Random [1, 10]:", random.Intn(10)+1)
+	fmt.Println("Random [-5, 5]:", random.Intn(11)-5)
 }
 
-// randomInt 生成指定范围内的随机整数
-func randomInt() {
-	// rand.Intn(n) 生成 [0, n) 的随机整数
-	// 要生成 [min, max]，需要 rand.Intn(max-min+1) + min
-	fmt.Println("Random [0, 100):", rand.Intn(100))
-	fmt.Println("Random [1, 10]:", rand.Intn(10)+1)
-	fmt.Println("Random [-5, 5]:", rand.Intn(11)-5)
+// randomFloat 输出浮点数区间的随机样本。
+func randomFloat(random *rand.Rand) {
+	fmt.Println("Random [0.0, 1.0):", random.Float64())
+
+	minValue, maxValue := 0.5, 2.5
+	value := minValue + random.Float64()*(maxValue-minValue)
+	fmt.Printf("Random [%.2f, %.2f): %.4f\n", minValue, maxValue, value)
 }
 
-// randomFloat 生成指定范围内的随机浮点数
-func randomFloat() {
-	// rand.Float64() 生成 [0, 1) 的随机浮点数
-	fmt.Println("Random [0.0, 1.0):", rand.Float64())
-
-	// 要生成 [min, max]，使用公式
-	min, max := 0.5, 2.5
-	random := min + rand.Float64()*(max-min)
-	fmt.Printf("Random [%.2f, %.2f): %.4f\n", min, max, random)
-}
-
-// randomChoice 从切片中随机选择一个元素
-func randomChoice() {
+// randomChoice 演示从非空切片中随机选择元素。
+func randomChoice(random *rand.Rand) {
 	colors := []string{"red", "green", "blue", "yellow", "purple"}
-	choice := colors[rand.Intn(len(colors))]
+	choice := colors[random.Intn(len(colors))]
 	fmt.Printf("Random choice from %v: %s\n", colors, choice)
-
-	// 从数字中选择
-	numbers := []int{10, 20, 30, 40, 50}
-	numChoice := numbers[rand.Intn(len(numbers))]
-	fmt.Printf("Random number from %v: %d\n", numbers, numChoice)
 }
 
-// shuffleSlice 打乱切片顺序
-func shuffleSlice() {
+// shuffleSlice 演示原地打乱切片。
+func shuffleSlice(random *rand.Rand) {
 	colors := []string{"red", "green", "blue", "yellow", "purple"}
 	fmt.Println("Before shuffle:", colors)
 
-	// rand.Shuffle 打乱切片
-	// 第一个参数是长度，第二个是交换函数
-	rand.Shuffle(len(colors), func(i, j int) {
+	random.Shuffle(len(colors), func(i, j int) {
 		colors[i], colors[j] = colors[j], colors[i]
 	})
 	fmt.Println("After shuffle:", colors)
 }
 
-// generateRandomArray 生成随机数组
-func generateRandomArray(n, min, max int) []int {
-	arr := make([]int, n)
-	for i := 0; i < n; i++ {
-		arr[i] = rand.Intn(max-min+1) + min
+// generateRandomArray 生成闭区间 [minValue, maxValue] 内的随机整数。
+func generateRandomArray(random *rand.Rand, count, minValue, maxValue int) []int {
+	if count <= 0 || minValue > maxValue {
+		return []int{}
 	}
-	return arr
+
+	result := make([]int, count)
+	for i := range result {
+		result[i] = random.Intn(maxValue-minValue+1) + minValue
+	}
+	return result
 }
 
-// randomPassword 生成随机密码
-func randomPassword(length int) string {
-	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%"
-	b := make([]byte, length)
-	for i := range b {
-		b[i] = charset[rand.Intn(len(charset))]
-	}
-	return string(b)
-}
-
-// randomWithSource 使用自定义 Source
-func randomWithSource() {
-	// 创建自定义 Source（更安全，可以并发使用）
-	src := rand.NewSource(time.Now().UnixNano())
-	r := rand.New(src)
-
-	fmt.Println("Using custom source:")
-	fmt.Println("Random int:", r.Intn(100))
-	fmt.Println("Random float:", r.Float64())
+// reproducibleSequence 演示固定种子产生可重复序列。
+func reproducibleSequence(seed int64, count int) []int {
+	random := rand.New(rand.NewSource(seed))
+	return generateRandomArray(random, count, 0, 99)
 }
 
 func main() {
-	// 初始化随机数
-	initRand()
+	// Go 1.25 中无需调用全局 rand.Seed；这里使用局部源明确状态所有权。
+	random := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	fmt.Println("=== random int ===")
-	randomInt()
+	randomInt(random)
 
 	fmt.Println("\n=== random float ===")
-	randomFloat()
+	randomFloat(random)
 
 	fmt.Println("\n=== random choice ===")
-	randomChoice()
+	randomChoice(random)
 
 	fmt.Println("\n=== shuffle ===")
-	shuffleSlice()
+	shuffleSlice(random)
 
 	fmt.Println("\n=== generate random array ===")
-	arr := generateRandomArray(10, 1, 100)
-	fmt.Println("Random array:", arr)
+	fmt.Println(generateRandomArray(random, 10, 1, 100))
 
-	fmt.Println("\n=== random password ===")
-	password := randomPassword(16)
-	fmt.Printf("Random password: %s\n", password)
-
-	fmt.Println("\n=== random with custom source ===")
-	randomWithSource()
+	fmt.Println("\n=== reproducible sequence ===")
+	fmt.Println(reproducibleSequence(42, 5))
+	fmt.Println(reproducibleSequence(42, 5))
 }

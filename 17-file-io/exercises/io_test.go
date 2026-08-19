@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+	"testing/fstest"
 )
 
 func TestCopyAndLowercaseTee(t *testing.T) {
@@ -35,6 +36,21 @@ func TestCountWords(t *testing.T) {
 	got, err := CountWords(bytes.NewBufferString("go io go"))
 	if err != nil || !reflect.DeepEqual(got, map[string]int{"go": 2, "io": 1}) {
 		t.Fatalf("counts = %v, err = %v", got, err)
+	}
+}
+
+func TestCountLongWordsAndFS(t *testing.T) {
+	word := bytes.Repeat([]byte{'x'}, 2048)
+	if _, err := CountLongWords(bytes.NewReader(word), 1024); err == nil {
+		t.Fatal("expected scanner token limit error")
+	}
+	counts, err := CountLongWords(bytes.NewReader(word), 4096)
+	if err != nil || counts[string(word)] != 1 {
+		t.Fatalf("long word counts = %v, err = %v", counts, err)
+	}
+	data, err := ReadFSFile(fstest.MapFS{"config.txt": &fstest.MapFile{Data: []byte("ok")}}, "config.txt")
+	if err != nil || string(data) != "ok" {
+		t.Fatalf("ReadFSFile() = %q, err = %v", data, err)
 	}
 }
 

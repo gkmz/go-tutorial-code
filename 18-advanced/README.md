@@ -29,12 +29,12 @@ cd exercises && go test ./...
 | `escape` | 返回值、返回指针、slice、闭包、编译器诊断和分配 benchmark |
 | `pprof` | HTTP pprof、CPU/heap profile 和采集辅助函数 |
 | `cgo` | CGO 调用边界、字符串所有权、构建标签和调用 benchmark |
-| `config` | 配置优先级、Viper、校验、脱敏摘要和原子快照 |
+| `config` | 配置优先级、Viper、校验、脱敏摘要、原子快照和文件热更新 |
 | `logging` | slog、zap、脱敏、HTTP 请求日志、轮转与 benchmark |
-| `fuzz` | 原生模糊测试 |
-| `wire` | Wire 生成流程说明 |
+| `fuzz` | UTF-8、JSON 解析、失败语料和原生模糊测试 |
+| `wire` | 手工装配、Wire v0.7.0 生成、错误传播和清理行为 |
 
-这些目录用于支撑教程中的关键示例。依赖注入生成、CGO、pprof 和外部服务相关示例需要根据文章说明准备工具或运行环境。
+这些目录用于支撑教程中的关键示例。Wire 已被官方归档，本仓库保留可生成、可测试的示例用于维护既有项目；CGO、pprof 和外部服务相关示例需要根据文章说明准备工具或运行环境。
 
 GMP 示例位于 `gmp`，包含可控数量的 Goroutine 实验、可取消 CPU 任务、计时器等待、不同 `GOMAXPROCS` 的 Benchmark 和 Trace 工作负载：
 
@@ -99,12 +99,31 @@ go test -run '^$' -bench . -benchmem ./cgo
 CGO_ENABLED=0 go run ./cgo
 ```
 
-配置管理示例位于 `config`，包含文件和环境变量合并、显式覆盖、强类型校验、`.env` 辅助、脱敏摘要和原子快照：
+配置管理示例位于 `config`，包含文件和环境变量合并、显式覆盖、强类型校验、`.env` 辅助、脱敏摘要、原子快照，以及基于 fsnotify 的配置文件监听、防抖和校验后热更新：
 
 ```bash
 go test ./config
 go vet ./config
 go test -race ./config
+```
+
+模糊测试示例位于 `fuzz`，覆盖字节与 UTF-8 码点语义、非法 UTF-8 回归语料，以及带输入上限的 JSON 解析往返属性：
+
+```bash
+go test ./fuzz
+go test -race ./fuzz
+go test ./fuzz -fuzz '^FuzzReverseUTF8$' -fuzztime=10s
+go test ./fuzz -fuzz '^FuzzRecordRoundTrip$' -fuzztime=10s
+```
+
+Wire 示例位于 `wire`，同时提供手工 Injector 和 Wire v0.7.0 生成结果。Wire 官方仓库已经归档，因此示例用于理解和维护既有项目，新项目应先评估手工装配：
+
+```bash
+go run github.com/google/wire/cmd/wire@v0.7.0 ./wire
+go test ./wire ./wire/cmd/demo
+go vet ./wire ./wire/cmd/demo
+go test -race ./wire
+go run ./wire/cmd/demo
 ```
 
 日志管理示例位于 `logging`，包含 slog Handler、敏感字段脱敏、HTTP 请求日志、zap 动态级别、文件轮转和公平 benchmark：

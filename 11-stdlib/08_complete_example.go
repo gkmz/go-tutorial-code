@@ -10,7 +10,7 @@ import (
 
 // 完整示例：综合使用标准库
 
-// 用户结构
+// User 表示可以持久化为 JSON 的用户。
 type User struct {
 	ID        int       `json:"id"`
 	Name      string    `json:"name"`
@@ -18,7 +18,7 @@ type User struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-// 格式化用户信息
+// String 返回不包含敏感字段的用户摘要。
 func (u User) String() string {
 	return fmt.Sprintf("User{ID: %d, Name: %s, Email: %s, Created: %s}",
 		u.ID, u.Name, u.Email, u.CreatedAt.Format("2006-01-02"))
@@ -55,12 +55,9 @@ func loadUser(filename string) (*User, error) {
 	return &user, nil
 }
 
-// 处理用户名
+// processName 清理用户名中的首尾空白和连续空白。
 func processName(name string) string {
-	// 去除空格并转为标题格式
-	name = strings.TrimSpace(name)
-	name = strings.Title(strings.ToLower(name))
-	return name
+	return strings.Join(strings.Fields(name), " ")
 }
 
 func main() {
@@ -96,7 +93,10 @@ func main() {
 	age := time.Since(loadedUser.CreatedAt)
 	fmt.Printf("Account age: %v\n", age.Round(time.Second))
 
-	// 清理
-	os.Remove(filename)
+	// 清理示例生成的文件，并报告清理失败。
+	if err := os.Remove(filename); err != nil {
+		fmt.Println("Cleanup error:", err)
+		return
+	}
 	fmt.Println("Cleaned up")
 }

@@ -30,10 +30,10 @@ func main() {
 	fmt.Println()
 
 	fmt.Println("3. 配置 Git 认证 (Token):")
-	fmt.Println("   git config --global url.\"https://username:token@github.com/\".insteadOf \"https://github.com/\"")
+	fmt.Println("   使用凭据管理器或 CI 密钥注入，避免把 Token 写入 URL 或命令历史")
 	fmt.Println()
 
-	fmt.Println("4. 使用 .netrc 文件:")
+	fmt.Println("4. 使用 .netrc 文件（仅在权限为 0600 且不提交时）:")
 	fmt.Println("   # ~/.netrc")
 	fmt.Println("   machine github.com")
 	fmt.Println("   login username")

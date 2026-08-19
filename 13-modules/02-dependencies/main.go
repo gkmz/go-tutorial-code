@@ -14,8 +14,8 @@ func main() {
 
 	// 使用第三方库
 	color.Green("成功添加依赖")
-	color.Yellow("注意 运行 go mod tidy 整理依赖")
-	color.Cyan("ℹ 查看 go.mod 和 go.sum 文件")
+	color.Yellow("运行 go mod tidy 后需要检查依赖变化")
+	color.Cyan("查看 go.mod 和 go.sum 文件")
 	fmt.Println()
 
 	fmt.Println("常用命令:")

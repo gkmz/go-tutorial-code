@@ -1,6 +1,7 @@
 package exercises
 
 import (
+	"errors"
 	"reflect"
 	"testing"
 )
@@ -37,5 +38,25 @@ func TestIntegerBounds(t *testing.T) {
 	int8Max, uint8Max, int32Max, int64Max := IntegerBounds()
 	if int8Max != 127 || uint8Max != 255 || int32Max != 2147483647 || int64Max != 9223372036854775807 {
 		t.Fatalf("unexpected integer bounds: %d, %d, %d, %d", int8Max, uint8Max, int32Max, int64Max)
+	}
+}
+
+func TestReplaceUserUpdatesOuterValueAndPreservesError(t *testing.T) {
+	got, err := ReplaceUser("guest", true, func() (string, error) {
+		return "vip", nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != "vip" {
+		t.Fatalf("ReplaceUser() = %q, want vip", got)
+	}
+
+	errLoad := errors.New("user unavailable")
+	_, err = ReplaceUser("guest", true, func() (string, error) {
+		return "", errLoad
+	})
+	if !errors.Is(err, errLoad) {
+		t.Fatalf("ReplaceUser() error = %v, want wrapped load error", err)
 	}
 }

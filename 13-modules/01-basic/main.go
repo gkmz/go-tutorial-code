@@ -14,7 +14,7 @@ func main() {
 
 	fmt.Println("2. 查看 go.mod 文件:")
 	fmt.Println("   module github.com/username/myproject")
-	fmt.Println("   go 1.21")
+	fmt.Println("   go 1.25.1")
 	fmt.Println()
 
 	fmt.Println("3. 添加依赖:")

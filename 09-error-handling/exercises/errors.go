@@ -11,6 +11,11 @@ import (
 // ErrNotFound 表示目标资源不存在。
 var ErrNotFound = errors.New("not found")
 
+// WrapNotFound 为资源不存在错误增加上下文并保留错误链。
+func WrapNotFound(name string) error {
+	return fmt.Errorf("load %s: %w", name, ErrNotFound)
+}
+
 // Divide 执行整数除法并返回除零错误。
 func Divide(a, b int) (int, error) {
 	if b == 0 {
@@ -37,6 +42,17 @@ func ValidateRange(value, min, max int) error {
 		return &RangeError{Min: min, Max: max, Value: value}
 	}
 	return nil
+}
+
+// JoinValidationErrors 聚合非 nil 校验错误。
+func JoinValidationErrors(errs ...error) error {
+	nonNil := make([]error, 0, len(errs))
+	for _, err := range errs {
+		if err != nil {
+			nonNil = append(nonNil, err)
+		}
+	}
+	return errors.Join(nonNil...)
 }
 
 // SafeCall 执行函数并把同一 goroutine 中的 panic 转为 error。

@@ -6,6 +6,30 @@ import (
 	"sync"
 )
 
+// SendAndReceive 通过 channel 在两个 goroutine 之间传递一个整数。
+func SendAndReceive(value int) int {
+	values := make(chan int)
+	go func() {
+		values <- value
+	}()
+	return <-values
+}
+
+// CloseAndDrain 关闭输入 channel 后读取其中全部缓冲数据。
+func CloseAndDrain(values []int) []int {
+	input := make(chan int, len(values))
+	for _, value := range values {
+		input <- value
+	}
+	close(input)
+
+	result := make([]int, 0, len(values))
+	for value := range input {
+		result = append(result, value)
+	}
+	return result
+}
+
 // SafeCounter 是一个由互斥锁保护的计数器。
 type SafeCounter struct {
 	mu    sync.Mutex

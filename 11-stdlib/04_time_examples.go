@@ -5,76 +5,82 @@ import (
 	"time"
 )
 
-// time 包示例
-
-func main() {
-	fmt.Println("=== 示例 1: 获取时间 ===")
-
-	// 当前时间
+// printTimeBasics 演示时间点、时区、格式化和时间间隔。
+func printTimeBasics() {
 	now := time.Now()
 	fmt.Println("当前时间:", now)
 
-	// 指定时间
-	t := time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)
-	fmt.Println("指定时间:", t)
+	utc := time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)
+	fmt.Println("UTC 时间:", utc)
+	fmt.Println("Unix 时间戳:", now.Unix())
+	fmt.Println("从时间戳恢复:", time.Unix(now.Unix(), 0))
 
-	// Unix 时间戳
-	timestamp := time.Now().Unix()
-	fmt.Println("时间戳:", timestamp)
-
-	// 从时间戳创建时间
-	t = time.Unix(timestamp, 0)
-	fmt.Println("从时间戳:", t)
-
-	fmt.Println("\n=== 示例 2: 时间格式化 ===")
-
-	// Go 的格式化模板：2006-01-02 15:04:05
 	fmt.Println("日期:", now.Format("2006-01-02"))
 	fmt.Println("日期时间:", now.Format("2006-01-02 15:04:05"))
-	fmt.Println("时间:", now.Format("15:04:05"))
-	fmt.Println("自定义:", now.Format("2006/01/02"))
+	fmt.Println("RFC3339:", now.Format(time.RFC3339))
 
-	// 解析时间字符串
-	t, err := time.Parse("2006-01-02", "2024-01-12")
+	parsed, err := time.Parse("2006-01-02", "2024-01-12")
 	if err != nil {
-		fmt.Println("Error:", err)
+		fmt.Println("解析错误:", err)
+	} else {
+		fmt.Println("按 UTC 解析:", parsed)
 	}
-	fmt.Println("解析时间:", t)
 
-	fmt.Println("\n=== 示例 3: 时间计算 ===")
+	location, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		fmt.Println("加载时区错误:", err)
+	} else {
+		local, parseErr := time.ParseInLocation(
+			"2006-01-02 15:04",
+			"2026-08-19 09:30",
+			location,
+		)
+		if parseErr != nil {
+			fmt.Println("按指定时区解析错误:", parseErr)
+		} else {
+			fmt.Println("上海时间对应的 UTC:", local.UTC().Format(time.RFC3339))
+		}
+	}
 
-	// 加减时间
 	later := now.Add(2 * time.Hour)
 	earlier := now.Add(-30 * time.Minute)
+	fmt.Println("时间差:", later.Sub(now))
+	fmt.Println("later 在 now 之后:", later.After(now))
+	fmt.Println("earlier 在 now 之前:", earlier.Before(now))
+	fmt.Println("常用间隔:", time.Second, time.Minute, time.Hour)
+}
 
-	fmt.Println("2小时后:", later.Format("15:04:05"))
-	fmt.Println("30分钟前:", earlier.Format("15:04:05"))
+// timerExample 演示一次性 Timer 如何与业务结果竞争。
+func timerExample() {
+	fmt.Println("\n=== Timer：一次性事件 ===")
+	timer := time.NewTimer(30 * time.Millisecond)
+	defer timer.Stop()
 
-	// 时间差
-	duration := later.Sub(now)
-	fmt.Println("时间差:", duration)
-
-	// 比较时间
-	if later.After(now) {
-		fmt.Println("later is after now")
+	resultCh := make(chan string, 1)
+	select {
+	case result := <-resultCh:
+		fmt.Println("业务结果:", result)
+	case <-timer.C:
+		fmt.Println("Timer 到期：操作超时")
 	}
+}
 
-	if earlier.Before(now) {
-		fmt.Println("earlier is before now")
+// tickerExample 演示 Ticker 如何产生周期事件并在退出时停止。
+func tickerExample() {
+	fmt.Println("\n=== Ticker：周期事件 ===")
+	ticker := time.NewTicker(20 * time.Millisecond)
+	defer ticker.Stop()
+
+	for index := 1; index <= 3; index++ {
+		<-ticker.C
+		fmt.Println("第", index, "次周期事件")
 	}
+	fmt.Println("Ticker 已停止")
+}
 
-	fmt.Println("\n=== 示例 4: 时间间隔 ===")
-
-	fmt.Println("1秒:", time.Second)
-	fmt.Println("1分钟:", time.Minute)
-	fmt.Println("1小时:", time.Hour)
-
-	// 自定义间隔
-	duration = 2*time.Hour + 30*time.Minute
-	fmt.Println("自定义间隔:", duration)
-
-	fmt.Println("\n=== 示例 5: 睡眠 ===")
-	fmt.Println("睡眠1秒...")
-	time.Sleep(time.Second)
-	fmt.Println("醒来了！")
+func main() {
+	fmt.Println("=== 时间点、时区与间隔 ===")
+	printTimeBasics()
+	timerExample()
+	tickerExample()
 }

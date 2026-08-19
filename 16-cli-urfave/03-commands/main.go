@@ -18,8 +18,9 @@ func main() {
 	// 定义命令
 	app.Commands = []*cli.Command{
 		{
-			Name:    "hello",
-			Aliases: []string{"h"},
+			Name: "hello",
+			// h 已被内置 help 命令占用，使用 H 避免别名冲突。
+			Aliases: []string{"H"},
 			Usage:   "向你问好",
 			Flags: []cli.Flag{
 				&cli.StringFlag{

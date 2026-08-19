@@ -16,6 +16,9 @@ func TestFileMode(t *testing.T) {
 }
 
 func TestColor(t *testing.T) {
+	if Unknown.IsValid() || Unknown.String() != "Unknown" {
+		t.Fatal("unknown color should be invalid")
+	}
 	color, err := FromString("Green")
 	if err != nil || color != Green || !color.IsValid() {
 		t.Fatalf("unexpected color: %v, %v", color, err)

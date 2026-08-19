@@ -12,6 +12,22 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// parseTwoNumbers 解析 urfave/cli 子命令接收的两个数字参数。
+func parseTwoNumbers(args []string) (float64, float64, error) {
+	if len(args) < 2 {
+		return 0, 0, fmt.Errorf("必须提供两个数字")
+	}
+	a, err := strconv.ParseFloat(args[0], 64)
+	if err != nil {
+		return 0, 0, fmt.Errorf("第一个数字格式错误: %w", err)
+	}
+	b, err := strconv.ParseFloat(args[1], 64)
+	if err != nil {
+		return 0, 0, fmt.Errorf("第二个数字格式错误: %w", err)
+	}
+	return a, b, nil
+}
+
 func main() {
 	calc := calculator.New()
 
@@ -19,12 +35,6 @@ func main() {
 		Name:    "calc",
 		Usage:   "使用 urfave/cli 重构的专业计算器",
 		Version: "v2.0.0",
-		Authors: []*cli.Author{
-			{
-				Name:  "极客老墨",
-				Email: "hankmo.x@gmail.com",
-			},
-		},
 		Commands: []*cli.Command{
 			{
 				Name:      "add",
@@ -32,16 +42,9 @@ func main() {
 				Usage:     "执行加法运算",
 				ArgsUsage: "<num1> <num2>",
 				Action: func(c *cli.Context) error {
-					if c.NArg() < 2 {
-						return fmt.Errorf("必须提供两个数字进行加法运算")
-					}
-					a, err := strconv.ParseFloat(c.Args().Get(0), 64)
+					a, b, err := parseTwoNumbers([]string{c.Args().Get(0), c.Args().Get(1)})
 					if err != nil {
-						return fmt.Errorf("第一个数字格式错误: %v", err)
-					}
-					b, err := strconv.ParseFloat(c.Args().Get(1), 64)
-					if err != nil {
-						return fmt.Errorf("第二个数字格式错误: %v", err)
+						return err
 					}
 					color.Green("Result: %.2f + %.2f = %.2f", a, b, calc.Add(a, b))
 					return nil
@@ -53,11 +56,10 @@ func main() {
 				Usage:     "执行减法运算",
 				ArgsUsage: "<num1> <num2>",
 				Action: func(c *cli.Context) error {
-					if c.NArg() < 2 {
-						return fmt.Errorf("必须提供两个数字进行减法运算")
+					a, b, err := parseTwoNumbers([]string{c.Args().Get(0), c.Args().Get(1)})
+					if err != nil {
+						return err
 					}
-					a, _ := strconv.ParseFloat(c.Args().Get(0), 64)
-					b, _ := strconv.ParseFloat(c.Args().Get(1), 64)
 					color.Green("Result: %.2f - %.2f = %.2f", a, b, calc.Subtract(a, b))
 					return nil
 				},
@@ -68,11 +70,10 @@ func main() {
 				Usage:     "执行乘法运算",
 				ArgsUsage: "<num1> <num2>",
 				Action: func(c *cli.Context) error {
-					if c.NArg() < 2 {
-						return fmt.Errorf("必须提供两个数字进行乘法运算")
+					a, b, err := parseTwoNumbers([]string{c.Args().Get(0), c.Args().Get(1)})
+					if err != nil {
+						return err
 					}
-					a, _ := strconv.ParseFloat(c.Args().Get(0), 64)
-					b, _ := strconv.ParseFloat(c.Args().Get(1), 64)
 					color.Green("Result: %.2f * %.2f = %.2f", a, b, calc.Multiply(a, b))
 					return nil
 				},
@@ -83,11 +84,10 @@ func main() {
 				Usage:     "执行除法运算",
 				ArgsUsage: "<num1> <num2>",
 				Action: func(c *cli.Context) error {
-					if c.NArg() < 2 {
-						return fmt.Errorf("必须提供两个数字进行除法运算")
+					a, b, err := parseTwoNumbers([]string{c.Args().Get(0), c.Args().Get(1)})
+					if err != nil {
+						return err
 					}
-					a, _ := strconv.ParseFloat(c.Args().Get(0), 64)
-					b, _ := strconv.ParseFloat(c.Args().Get(1), 64)
 					res, err := calc.Divide(a, b)
 					if err != nil {
 						return err

@@ -46,29 +46,29 @@ func TestWithHelper(t *testing.T) {
 
 // 4. 面向接口的 Mock 实战
 // 被测试的业务逻辑依赖一个接口，而不是具体的数据库实现。
-type UserRepository interface {
+type userRepository interface {
 	GetName(id int) string
 }
 
-func GetGreeting(repo UserRepository, id int) string {
+func getGreeting(repo userRepository, id int) string {
 	name := repo.GetName(id)
 	return "Hello, " + name
 }
 
 // 在测试中定义一个 Mock 实现
-type MockRepo struct{}
+type mockRepo struct{}
 
-func (m *MockRepo) GetName(id int) string {
+func (m *mockRepo) GetName(id int) string {
 	if id == 1 {
-		return "极客老墨"
+		return "Go"
 	}
 	return "Guest"
 }
 
 func TestGetGreeting(t *testing.T) {
-	mock := &MockRepo{}
-	got := GetGreeting(mock, 1)
-	want := "Hello, 极客老墨"
+	mock := &mockRepo{}
+	got := getGreeting(mock, 1)
+	want := "Hello, Go"
 
 	if got != want {
 		t.Errorf("got %q, want %q", got, want)

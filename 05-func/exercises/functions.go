@@ -26,6 +26,14 @@ func (u *User) SetAge(age int) {
 	u.Age = age
 }
 
+// DisplayName 返回用户名称；nil 接收者返回明确的占位文本。
+func (u *User) DisplayName() string {
+	if u == nil {
+		return "<nil user>"
+	}
+	return u.Name
+}
+
 // Filter 返回满足 predicate 的整数。
 func Filter(values []int, predicate func(int) bool) []int {
 	result := make([]int, 0, len(values))
@@ -35,6 +43,13 @@ func Filter(values []int, predicate func(int) bool) []int {
 		}
 	}
 	return result
+}
+
+// MarkFirst 修改可变参数切片的第一个元素，用于演示展开切片后的共享关系。
+func MarkFirst(values ...int) {
+	if len(values) > 0 {
+		values[0] = -values[0]
+	}
 }
 
 // NewCounter 返回一个从 1 开始递增的闭包计数器。

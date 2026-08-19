@@ -12,18 +12,18 @@ build:
 # 使用方式: make run ARGS="5 + 3"
 # 或者: make run ARGS="5 '*' 3"
 run:
-	go run cmd/calc/main.go $(ARGS)
+	go run ./cmd/calc $(ARGS)
 
 # 运行示例
 run-example:
 	@echo "Addition example:"
-	@go run cmd/calc/main.go 5 + 3
+	@go run ./cmd/calc 5 + 3
 	@echo "\nSubtraction example:"
-	@go run cmd/calc/main.go 10 - 2
+	@go run ./cmd/calc 10 - 2
 	@echo "\nMultiplication example:"
-	@go run cmd/calc/main.go 5 '*' 3
+	@go run ./cmd/calc 5 '*' 3
 	@echo "\nDivision example:"
-	@go run cmd/calc/main.go 10 / 2
+	@go run ./cmd/calc 10 / 2
 
 # 测试
 test:
@@ -36,7 +36,7 @@ clean:
 
 # 安装到 GOPATH
 install:
-	go install
+	go install ./cmd/calc
 
 # 交叉编译
 build-all:

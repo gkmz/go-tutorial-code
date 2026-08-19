@@ -22,7 +22,6 @@ func main() {
 	fmt.Println("\n=== 示例 2: 字符串转换 ===")
 	fmt.Println(strings.ToUpper("hello"))
 	fmt.Println(strings.ToLower("HELLO"))
-	fmt.Println(strings.Title("hello world"))
 	fmt.Println(strings.Replace("hello", "l", "L", 1))
 	fmt.Println(strings.ReplaceAll("hello", "l", "L"))
 	fmt.Println(strings.Repeat("Go", 3))

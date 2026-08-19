@@ -19,6 +19,13 @@ func TestDivideAndSetAge(t *testing.T) {
 	if user.Age != 18 {
 		t.Fatalf("age = %d, want 18", user.Age)
 	}
+	if user.DisplayName() != "Go" {
+		t.Fatalf("DisplayName() = %q, want Go", user.DisplayName())
+	}
+	var nilUser *User
+	if nilUser.DisplayName() != "<nil user>" {
+		t.Fatalf("nil DisplayName() = %q, want <nil user>", nilUser.DisplayName())
+	}
 }
 
 func TestFilterAndCounter(t *testing.T) {
@@ -29,6 +36,14 @@ func TestFilterAndCounter(t *testing.T) {
 	first, second := NewCounter(), NewCounter()
 	if first() != 1 || first() != 2 || second() != 1 {
 		t.Fatal("counters do not have independent state")
+	}
+}
+
+func TestMarkFirstSharesExpandedSlice(t *testing.T) {
+	values := []int{1, 2}
+	MarkFirst(values...)
+	if !reflect.DeepEqual(values, []int{-1, 2}) {
+		t.Fatalf("values after MarkFirst() = %v, want [-1 2]", values)
 	}
 }
 

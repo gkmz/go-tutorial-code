@@ -64,8 +64,10 @@ func (m FileMode) CanExecute() bool { return m&ModeExecute != 0 }
 type Color int
 
 const (
+	// Unknown 表示未识别或未初始化的颜色。
+	Unknown Color = iota
 	// Red 表示红色。
-	Red Color = iota
+	Red
 	// Green 表示绿色。
 	Green
 	// Blue 表示蓝色。
@@ -74,10 +76,16 @@ const (
 
 // String 返回颜色名称。
 func (c Color) String() string {
-	if !c.IsValid() {
+	switch c {
+	case Red:
+		return "Red"
+	case Green:
+		return "Green"
+	case Blue:
+		return "Blue"
+	default:
 		return "Unknown"
 	}
-	return [...]string{"Red", "Green", "Blue"}[c]
 }
 
 // IsValid 判断颜色值是否有效。

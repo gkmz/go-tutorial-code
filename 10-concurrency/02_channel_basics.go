@@ -2,22 +2,23 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
-// Channel 基础示例
+// main 演示无缓冲、缓冲和关闭后的 channel 行为。
 
 func main() {
 	fmt.Println("=== 示例 1: 无缓冲 Channel ===")
 	ch1 := make(chan string)
+	done := make(chan struct{})
 
 	go func() {
 		msg := <-ch1
 		fmt.Println("Received:", msg)
+		close(done)
 	}()
 
 	ch1 <- "Hello"
-	time.Sleep(time.Second)
+	<-done
 
 	fmt.Println("\n=== 示例 2: 缓冲 Channel ===")
 	ch2 := make(chan int, 3)

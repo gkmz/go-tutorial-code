@@ -70,6 +70,25 @@ func (c Circle) Area() float64 { return math.Pi * c.Radius * c.Radius }
 // Perimeter 返回圆形周长。
 func (c Circle) Perimeter() float64 { return 2 * math.Pi * c.Radius }
 
+// Triangle 表示三边长度构成的三角形。
+type Triangle struct {
+	A float64
+	B float64
+	C float64
+}
+
+// Area 返回三角形面积，非法边长返回 0。
+func (t Triangle) Area() float64 {
+	semiperimeter := t.Perimeter() / 2
+	if t.A <= 0 || t.B <= 0 || t.C <= 0 || t.A+t.B <= t.C || t.A+t.C <= t.B || t.B+t.C <= t.A {
+		return 0
+	}
+	return math.Sqrt(semiperimeter * (semiperimeter - t.A) * (semiperimeter - t.B) * (semiperimeter - t.C))
+}
+
+// Perimeter 返回三角形周长。
+func (t Triangle) Perimeter() float64 { return t.A + t.B + t.C }
+
 // TotalArea 返回一组形状的总面积。
 func TotalArea(shapes []Shape) float64 {
 	var total float64
@@ -123,4 +142,12 @@ func MarshalUser() ([]byte, error) {
 // FormatAnimal 返回动物行为摘要。
 func FormatAnimal(animal Animal) string {
 	return fmt.Sprintf("%s; %s", animal.Eat(), animal.Sleep())
+}
+
+// SafeEqual 比较两个接口值；不可比较的动态值返回 false，而不是触发 panic。
+func SafeEqual(left, right any) bool {
+	defer func() {
+		_ = recover()
+	}()
+	return left == right
 }
